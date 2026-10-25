@@ -10,6 +10,12 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.23.1] — 2026-10-24
+
+Memory pages follow the rename to Epico.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
 ### Fixed
 
 - Memory pages are written under `epico/<type>/` instead of the pre-rename `epic/<type>/`; reads match both prefixes, so pages written before the rename stay visible.
@@ -1717,7 +1723,9 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.22.0...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.23.1...HEAD
+[0.23.1]: https://github.com/lucascouts/epico/compare/v0.23.0...v0.23.1
+[0.23.0]: https://github.com/lucascouts/epico/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/lucascouts/epico/releases/tag/v0.22.0
 [0.21.0]: https://github.com/lucascouts/epico/releases/tag/v0.21.0
 [0.20.0]: https://github.com/lucascouts/epico/releases/tag/v0.20.0
