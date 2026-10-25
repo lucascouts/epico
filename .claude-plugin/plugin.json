@@ -1,6 +1,6 @@
 {
   "name": "epico",
-  "version": "0.23.0",
+  "version": "0.23.1",
   "description": "Scale-adaptive story framework for features and bugfixes: structured requirements (EARS), design, task breakdown, and execution with specialized sub-agents for codebase analysis, test authoring, review, implementation, and validation with audit.",
   "author": {
     "name": "Lucas CS",
