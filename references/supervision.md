@@ -7,7 +7,7 @@ Loaded by Run mode at a group gate when `epico-inbox` printed something, and by 
 - **Supervisor → run:** an ai-memory message to the project's mailbox, subject `supervision: <check> <NNN>[ <task>]`, body one claim with its evidence (the note, the exit code, the file and line) — **only for a claim about a run still in progress**. The relay hands a message to whichever story closes a box next, so a finding about a finished or archived story never goes this way.
 - **Everything after the run goes to the findings store**, `.epico/findings/`, written by `epic-finding` from `epic-supervisor`: the sensors (`epic-supervise sense`) and the claims check at validate add findings there, and the checkpoint triages them with the user.
 - **Relay:** `hook-inbox.sh` claims only `supervision:` messages, at most three at a time, after every closed box (a hook) and at every group gate (`epico-inbox --story <dir>`). Each one is written to `.draft/run-report.md` under `## Supervision` and handed to the orchestrator as an **untrusted claim**.
-- **Run → supervisor:** a memory page `epic/supervision/<NNN>/<check>-reply` — H1 the check and the story, then the claim, what was run to verify it, and the outcome. Same path, same check: a later reply rewrites it.
+- **Run → supervisor:** a memory page `epico/supervision/<NNN>/<check>-reply` — H1 the check and the story, then the claim, what was run to verify it, and the outcome. Same path, same check: a later reply rewrites it.
 
 ## What the orchestrator does with a claim
 

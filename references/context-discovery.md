@@ -17,7 +17,7 @@ Runs in **all scales**, and only when triage step 7a found memory available ([mc
 
 1. `memory_recent` with `limit: 5` — what the last sessions on this project left behind
 2. one `memory_query` whose query is the request's own nouns joined by `OR` — the entities, actions and files the user named — with `limit: 10`
-3. one `memory_query` with `global: true` for the techs the request or the scan names, restricted to `gotcha` and `research` pages (`epic/gotcha/` or `epic/research/` in the path), `limit: 5` — what other projects learned about the same stack. Each hit is a pointer: verify it against this codebase and this version before it changes anything
+3. one `memory_query` with `global: true` for the techs the request or the scan names, restricted to `gotcha` and `research` pages (`epico/gotcha/` or `epico/research/` in the path, or their [legacy `epic/`](mcp-integration.md#typed-pages)), `limit: 5` — what other projects learned about the same stack. Each hit is a pointer: verify it against this codebase and this version before it changes anything
 
 The hits are injected as a **Prior Knowledge** block in the triage proposal and in the Analyst prompt below, one line per hit: path, title, snippet. Rules:
 

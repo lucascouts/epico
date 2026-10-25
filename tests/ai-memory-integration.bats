@@ -79,7 +79,7 @@ has() { # has <label> <block> <keyword>
   proc=$(section "$ROOT/references/run-mode.md" '^## Procedure' '^## ')
   has "M5 recall" "$proc" "memory_query"
   end=$(section "$ROOT/references/run-mode.md" '^### End of Run' '^## ')
-  has "M5 page" "$end" "epic/deviation/"
+  has "M5 page" "$end" "epico/deviation/"
 }
 
 @test "M6: validate-mode.md hands prior findings to the Auditor to verify, and writes audit pages" {
@@ -87,7 +87,7 @@ has() { # has <label> <block> <keyword>
   has "M6 prior" "$aud" "memory"
   has "M6 verify" "$aud" "verify"
   proc=$(section "$ROOT/references/validate-mode.md" '^## Validate Mode Procedure' '^## ')
-  has "M6 page" "$proc" "epic/finding/"
+  has "M6 page" "$proc" "epico/finding/"
 }
 
 @test "M7: plugin.json exposes aiMemory with default auto" {
