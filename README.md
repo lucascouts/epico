@@ -54,7 +54,7 @@ claude plugin install epico@lucascouts
 
 ```bash
 git clone https://github.com/lucascouts/epico.git
-claude --plugin-dir ./epic
+claude --plugin-dir ./epico
 ```
 
 Run `/reload-plugins` after updating plugin files.
@@ -137,7 +137,7 @@ When a story artifact is written to `.epico/stories/*/`, a PostToolUse hook runs
 ## Directory Layout
 
 ```
-epic/
+epico/
 ├── .claude-plugin/plugin.json   # manifest (name, userConfig, homepage, repository)
 ├── settings.json                # plugin defaults (subagentStatusLine)
 ├── skills/epico/SKILL.md         # main skill (/epico:epico)
@@ -187,7 +187,7 @@ Full walkthrough of both branches: [references/init-mode.md](references/init-mod
 Run validation as a CI step without launching an interactive session:
 
 ```bash
-EPICO_PLUGIN_ROOT=./epic  # path to cloned plugin
+EPICO_PLUGIN_ROOT=./epico  # path to cloned plugin
 bash "$EPICO_PLUGIN_ROOT/scripts/validate-story.sh" .epico/stories/001-feature/ --cross-ref
 ```
 
@@ -222,7 +222,7 @@ Generate stories programmatically with the Agent SDK:
 
 ```bash
 CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1 claude -p "/epico:epico Add retry logic to the payment gateway" \
-  --plugin-dir /path/to/epic \
+  --plugin-dir /path/to/epico \
   --permission-mode acceptEdits --permission-prompts none \
   --allowedTools "Read,Write,Edit,Glob,Grep,Bash,Agent,mcp__ai-memory__*" \
   --output-format json

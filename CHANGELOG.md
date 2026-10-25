@@ -10,6 +10,11 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Fixed
+
+- Memory pages are written under `epico/<type>/` instead of the pre-rename `epic/<type>/`; reads match both prefixes, so pages written before the rename stay visible.
+- README install and CI examples point at the `epico` checkout instead of `epic`.
+
 ## [0.23.0] — 2026-10-24
 
 Production code stays with the agent that holds the conversation, verification runs from scripts instead of sub-agents, and every language the run detects gets its own secure-coding rules.

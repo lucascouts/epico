@@ -79,20 +79,22 @@ Its LLM work — the consolidation that turns raw observations into pages, the l
 | Point | Read | Write |
 |---|---|---|
 | Triage / Phase 1 — [context-discovery.md](context-discovery.md#prior-knowledge) | `memory_recent` (5) and one `memory_query` built from the request's own nouns, and one `global: true` query for `gotcha`/`research` pages on the detected techs | — |
-| Run — [run-mode.md](run-mode.md#procedure) | one `memory_query` per run for prior deviations, discoveries and gotchas on the detected techs, passed to every Executor as Project State | at End of Run, the deviation register as one page: `epic/deviation/NNN-<slug>.md`; each discovery tagged with a technology as a `gotcha` page — to `_global` (see Typed pages) |
-| Run with `--auto` — [run-mode.md](run-mode.md#assumptions-under---auto) | — | the assumptions the run made, as one page: `epic/decision/NNN-auto-assumptions.md` |
-| Validate — [validate-mode.md](validate-mode.md#auditor-sub-agent) | prior structural audit findings, handed to the Auditor as things to verify | after the verdict, one page per structural finding: `epic/finding/NNN-<subject>.md` |
+| Run — [run-mode.md](run-mode.md#procedure) | one `memory_query` per run for prior deviations, discoveries and gotchas on the detected techs, passed to every Executor as Project State | at End of Run, the deviation register as one page: `epico/deviation/NNN-<slug>.md`; each discovery tagged with a technology as a `gotcha` page — to `_global` (see Typed pages) |
+| Run with `--auto` — [run-mode.md](run-mode.md#assumptions-under---auto) | — | the assumptions the run made, as one page: `epico/decision/NNN-auto-assumptions.md` |
+| Validate — [validate-mode.md](validate-mode.md#auditor-sub-agent) | prior structural audit findings, handed to the Auditor as things to verify | after the verdict, one page per structural finding: `epico/finding/NNN-<subject>.md` |
 
 ### Typed pages
 
-Every page the Epico writes has a type, and the type is in its path: `epic/<type>/<NNN>-<slug>.md`, where `type` is one of `decision`, `gotcha`, `deviation`, `finding`, `research`, `progress`, `proposal`. A reader — a later triage, a supervisor, a person — filters by type before it reads a word.
+Every page the Epico writes has a type, and the type is in its path: `epico/<type>/<NNN>-<slug>.md`, where `type` is one of `decision`, `gotcha`, `deviation`, `finding`, `research`, `progress`, `proposal`. A reader — a later triage, a supervisor, a person — filters by type before it reads a word.
+
+**A project's older pages may sit under `epic/<type>/`**, the legacy prefix, and nothing moves them. Writes always go to `epico/`; a read that filters by path matches both prefixes, so those findings, decisions and gotchas stay visible. A page found only under `epic/` is rewritten under `epico/` when its subject is written again, never copied for its own sake.
 
 Each page opens with an H1, then one header line and, when it relates to another page, one links line:
 
 ```markdown
 # Executor hand-back drops the Red line
 as_of: 2026-10-13 · story: 004-login · type: finding · tech: go
-links: causes epic/deviation/004-login · fixes epic/finding/002-report-guard · contradicts — · supersedes —
+links: causes epico/deviation/004-login · fixes epico/finding/002-report-guard · contradicts — · supersedes —
 ```
 
 - **`as_of`** is the date the facts were true. A reader trusts a page less the older it is, and checks it against the code either way.
