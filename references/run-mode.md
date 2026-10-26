@@ -242,6 +242,7 @@ A refusal names its own reason in `reason`, and each arm is a statement about th
 - the target is **ambiguous**: more than one line answers to it, and which one was meant is not something a writer may guess
 - the story lives under `.epico/archive/` — an archived story is read-only
 - the group header still has open children (above), or the story, its `tasks.md`, or the rewrite itself could not be reached
+- at engineering level `project` or `product`, a Standard or Full sub-task whose `Tests:` field is not `None` and which has no entry in `.draft/red-evidence.yaml` — record its Red first; a box closed without it surfaces only at validation, as a `missing_red`
 
 **On a resumed run, "already closed" is benign confirmation, not a failure.** A run interrupted after a close and before its report is replayed over boxes that already carry their mark: read that refusal as *this one is already done*, log it, and move to the next box. Do not "repair" it by editing the file. The script stays strict on purpose — outside a resume, a second close is a real disagreement about what happened, and a silent one is what the refusal exists to prevent.
 
@@ -473,7 +474,7 @@ The Executor is a dedicated sub-agent that implements a single sub-task followin
 
 **Every report is on disk; the hand-back is short.** The Executor writes its full report to `.draft/reports/<sub-task>.md` and returns its deviation entries, at most 10 lines and the closing block; the Tech Reviewer and the Test Advisor do the same under `.draft/reports/`. On the inline route the main agent writes the same report file itself. Read a report file only when the hand-back says something needs it — with `grep` on the section you need, never the whole file. The Auditor reads `.draft/reports/` as claims to verify.
 
-**Recording an Executor-authored Red.** When the Executor reports a Standard Unit sub-task's inline Red, append its entry to `.draft/red-evidence.yaml` before closing the box — `task`, `target_path`, `command`, `failed: true`, `red_at: assertion`, `reason`, `recorded`, and `recorded_by: executor` — taken from the report's **Red (inline)** section. A report with no such section, or one whose Red failed before an assertion, is a failed sub-task, not a box to close.
+**Recording an Executor-authored Red.** When the Executor reports a Standard Unit sub-task's inline Red, append its entry to `.draft/red-evidence.yaml` before closing the box — `task`, `target_path`, `command`, `failed: true`, `red_at: assertion`, `reason`, `recorded`, and `recorded_by: executor` — taken from the report's **Red (inline)** section. A report with no such section, or one whose Red failed before an assertion, is a failed sub-task, not a box to close. `close-subtask.sh` refuses the close while the entry is missing.
 
 ### Executor Rules
 
