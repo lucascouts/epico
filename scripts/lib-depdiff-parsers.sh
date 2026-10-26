@@ -332,10 +332,23 @@ depdiff_names_gemfile() {
       return cnt > 0
     }
     function push_block(isdev) { depth++; dev[depth] = isdev; devdepth += isdev; opened[depth] = NR }
+    # semicolon: is there a ; outside a string literal on the line?
+    function semicolon(s,   i, c, q) {
+      q = ""
+      for (i = 1; i <= length(s); i++) {
+        c = substr(s, i, 1)
+        if (q != "") { if (c == "\\") i++; else if (c == q) q = ""; continue }
+        if (c == "\"" || c == sq) q = c
+        else if (c == ";") return 1
+      }
+      return 0
+    }
     {
       line = $0; sub(/\r$/, "", line); t = line; sub(/^[[:space:]]+/, "", t)
       if (t ~ /^#/) next
       sub(/[[:space:]]+#.*$/, "", t); sub(/[[:space:]]+$/, "", t)
+      # Two statements on one line would be read as the first alone: refused.
+      if (semicolon(t)) fail("more than one statement on a line: " line)
       # A trailing comma continues the call on the next line — a group header
       # or a gem option list split across lines is still one statement.
       if (t ~ /,$/) { cont = cont t " "; if (!contnr) contnr = NR; t = "" }

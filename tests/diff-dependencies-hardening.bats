@@ -169,3 +169,62 @@ TOML
   [ "$status" -eq 0 ]
   new_is "Cargo.toml evil-a" "Cargo.toml evil-b"
 }
+
+@test "fix 5.1: two Gemfile statements on one line send the Gemfile to unparsed" {
+  printf 'gem "puma"; gem "pg"\n' | put Gemfile
+  snapshot head > /dev/null
+  depdiff_run --base "$BASE"
+  [ "$status" -eq 0 ]
+  new_is
+  [ "$(unparsed_manifests)" = "Gemfile" ]
+}
+
+@test "fix 5.1: a one-line group block sends the Gemfile to unparsed" {
+  printf 'gem "rack"\ngroup :production do; gem "lograge"; end\n' | put Gemfile
+  snapshot head > /dev/null
+  depdiff_run --base "$BASE"
+  [ "$status" -eq 0 ]
+  new_is
+  [ "$(unparsed_manifests)" = "Gemfile" ]
+}
+
+@test "fix 5.1: a semicolon inside a gem's string is not a separator" {
+  printf 'gem "rack", require: "rack;x"\n' | put Gemfile
+  snapshot head > /dev/null
+  depdiff_run --base "$BASE"
+  [ "$status" -eq 0 ]
+  new_is "Gemfile rack"
+}
+
+@test "fix 5.2: an unknown argument, an empty --head and a --root that is not a directory exit 2 with the reason" {
+  depdiff_run --base "$BASE" --frobnicate
+  [ "$status" -eq 2 ]
+  one_object
+  reason_names "--frobnicate"
+
+  depdiff_run --base "$BASE" --head ""
+  [ "$status" -eq 2 ]
+  one_object
+  reason_names "--head"
+
+  run --separate-stderr bash "$SCRIPT" --root "$R/README.md" --base "$BASE"
+  [ "$status" -eq 2 ]
+  one_object
+  reason_names "root not found"
+}
+
+@test "fix 5.2: jq missing from PATH exits 2 with the reason as JSON" {
+  # A PATH holding every tool the script needs before its jq check, and no jq.
+  P=$(mktemp -d)
+  for t in bash sed dirname git; do ln -s "$(command -v "$t")" "$P/$t"; done
+  run --separate-stderr env PATH="$P" bash "$SCRIPT" --root "$R" --base "$BASE"
+  rm -rf "$P"
+  [ "$status" -eq 2 ]
+  [ "$output" = '{"error": "diff-dependencies.sh: jq is required"}' ]
+}
+
+@test "fix 5.2: --help exits 0 and prints the usage line" {
+  depdiff_run --help
+  [ "$status" -eq 0 ]
+  [ "$output" = "Usage: diff-dependencies.sh --base <rev> [--head <rev>] [--root <dir>]" ]
+}

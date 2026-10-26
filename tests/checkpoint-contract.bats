@@ -71,3 +71,9 @@ in_step3() { # <extended regex> — case-insensitive, inside step 3 only
   [ "$output" -eq 0 ]
   has 'Judgment items\*\* \(steps 2, 3, 4 and 6\)'
 }
+
+@test "step 3 shows an epico-depdiff refusal instead of reading it as no new dependency" {
+  in_step3 'exits 1 or 2'
+  in_step3 'show (its|the) `error`'
+  in_step3 'never (read|treat) (it|a refusal) as (no new dependency|nothing new)'
+}
