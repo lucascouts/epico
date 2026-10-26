@@ -44,6 +44,18 @@ After a sub-task's validation passes — whether an Executor or the main agent i
 - Error responses from the external service are handled (timeouts, 4xx, 5xx)
 - Authentication credentials are not hardcoded
 
+## Edge-case questions
+
+Walk these questions for the code under review, whatever the boundary or technology. They are questions to answer, never a minimum number of findings: a question that does not apply to this code is answered `n/a`, and a review whose seven answers raise no issue is a valid `PASS`. Inventing a finding to fill the list costs whoever fixes it a hunt for a defect that is not there.
+
+1. **Boundaries and off-by-one** — does the code handle zero, one, the first and last element, the maximum, and the value one past each limit?
+2. **Empty and huge input** — what does the code do with an empty string, list or file, and with input far larger than its tests use?
+3. **Concurrency** — can two callers reach this code at once, and is the state they share protected when they do?
+4. **Time and time zones** — does the code store and compare time in one zone, and does it survive a daylight-saving change or a clock that moves backward?
+5. **Partial failure** — when a step fails halfway, is the work already done rolled back or left in a state the next run can recover from?
+6. **Permissions** — does every path check that the caller may do this, and does a denied request fail closed?
+7. **Retries** — when a call is retried, is running it twice safe, and is the number of retries bounded?
+
 ## Measurement, Not Argument
 
 **Where a check can be run, run it.** A boundary defect is almost always observable: the linter names the undefined template variable, the compiler rejects the mismatched type, a `grep` shows the handler never inserts the key the template reads, `EXPLAIN` shows the index nobody built. Reasoning your way to the same conclusion produces a claim a reader has to take on trust — and a claim that is wrong looks exactly like one that is right.
@@ -57,8 +69,8 @@ So a finding resting on a runnable check carries the exact command and its obser
 1. Fetch current docs to verify behavior assumptions with `WebFetch`/`WebSearch` — the research tools you hold
 2. Review the implementation files against your focus area and the `language-rules.md` sections your prompt names — read only those; a language the prompt says has no section gets no rules from it
 3. Run the checks that bear on what you found, per Measurement above
-4. Write the full review to `<Story directory>/.draft/reports/<sub-task>-tech-review-<technology>.md` (through Bash: `cat > … <<'EOF'`), then reply with the verdict line and at most 10 lines — each issue's file, line and one-line summary. The verdicts:
-   - **PASS** — no issues found at this boundary
+4. Write the full review to `<Story directory>/.draft/reports/<sub-task>-tech-review-<technology>.md` (through Bash: `cat > … <<'EOF'`); the report file answers each edge-case question in one line: `n/a`, `checked — ok` or `issue — <file:line>`. Then reply with the verdict line and at most 10 lines — each issue's file, line and one-line summary. The verdicts:
+   - **PASS** — no issues found at this boundary. Zero findings is a valid `PASS`: the edge-case questions set no minimum number of findings, and a clean answer to each is the review done
    - **ISSUES** — list each issue with file path, line reference, what is wrong, and — where a runnable check backs it — the command and its output
    - **INCOMPLETE** — a check you needed could not run (missing toolchain, a command that errors for reasons outside the code) or you had to stop early: say what was reviewed, what was not, and why. Never report PASS over a review you did not finish
 

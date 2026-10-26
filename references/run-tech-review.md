@@ -46,7 +46,7 @@ The Tech Reviewer's focus areas, its measurement rule and its report format live
 
 ### Orchestrator Handling of Tech Review
 
-- If all Tech Reviewers report PASS: proceed to next sub-task
+- If all Tech Reviewers report PASS: proceed to next sub-task. Never ask a Tech Reviewer for more findings after a `PASS` — zero findings is a valid review, and a second ask turns the edge-case questions into a quota the reviewer fills by inventing issues
 - If any reports INCOMPLETE: tell the user what was not reviewed and why, and ask whether to proceed — an unfinished review is not a pass
 - If any report ISSUES:
   1. Present issues to user (in `--auto` mode: attempt fix first)
