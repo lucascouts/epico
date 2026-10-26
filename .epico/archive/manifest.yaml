@@ -489,3 +489,20 @@ archived:
       copies_removed: 0
     validated_sha: "68b8c14cf058e1089e546685622d034219b495d0"
     overrides_used: []
+  - story: "029-checkpoint-dependency-signal-and-edge-case-questions"
+    number: "029"
+    slug: "checkpoint-dependency-signal-and-edge-case-questions"
+    type: "feature"
+    scale: "standard"
+    status: "validated"
+    tasks_total: 31
+    tasks_closed: 31
+    tasks_deferred: 0
+    tasks_open: 0
+    deferred_items: []
+    archived_at: "2026-10-26T18:23:33-03:00"
+    pruned:
+      logs_kb: 0
+      copies_removed: 0
+    validated_sha: "6b36a5e7a703e5134dbee7fd4936211e79827d70"
+    overrides_used: []
