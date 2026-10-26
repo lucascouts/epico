@@ -11,7 +11,8 @@
 # asks of the second; its `Tests:` path must exist; its group's `Commit:` message must
 # be in git log. A [~] sub-task is SKIP with its qualifier. Every Quality Gate
 # whose text carries a backtick command is run the same way. What cannot be run
-# — a prose check, a span that is a file name, a gate with no command — is JUDGE:
+# — a prose check, a span that is a file name, a span holding a `<placeholder>`,
+# a gate with no command — is JUDGE:
 # the Auditor settles those, and only those.
 #
 # --only re-runs the named entries (sub-task ids, or gate:<text prefix>) and keeps
@@ -89,6 +90,10 @@ entries() {
 
 runnable() {  # <command> — is its first word something the shell can run?
   local first
+  # A `<job>`-style placeholder means the span describes a command rather than
+  # being one: run, it fails on the placeholder and reads as the check failing.
+  # A redirection (`cmd <in >out`) has a space or no closing `>` and passes.
+  if printf '%s' "$1" | grep -qE '<[A-Za-z][A-Za-z0-9_-]*>'; then return 1; fi
   first="$(printf '%s' "$1" | sed -E 's/^([A-Za-z_][A-Za-z0-9_]*=[^ ]* +)*//' | awk '{print $1}')"
   [ -n "$first" ] || return 1
   case "$first" in

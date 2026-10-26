@@ -1312,6 +1312,38 @@ if [[ "$FLAGS_GIVEN" -eq 0 && "$TARGET_KIND" == sub && -f "$STORY_ABS/.draft/red
   fi
 fi
 
+# --- 2b'''. A test-first sub-task with no Red on record ----------------------
+# At engineering level project or product, a Standard or Full story records
+# every test-first sub-task's Red in .draft/red-evidence.yaml — the Test
+# Advisor's at plan time, an Executor-authored Unit test's at run time
+# (run-mode.md, "Recording an Executor-authored Red"). A plain close of a
+# sub-task whose Tests field is not None, with no entry for it, is refused:
+# closed anyway, the gap surfaces only at validation as a missing_red, after
+# the run that could have recorded it is over. An undeclared level is exempt
+# (fail-open on absence, as every field the plugin added), and so are Fast,
+# spike, experiment, tool and a --tilde close, which claims no work was done.
+if [[ "$FLAGS_GIVEN" -eq 0 && "$TARGET_KIND" == sub ]]; then
+  RED_OWED=$(awk -v at="$LOC_LINES" '
+    NR == 1 && /^---[[:space:]]*$/ { fm = 1; next }
+    fm && /^---[[:space:]]*$/ { fm = 0; next }
+    fm && /^scale:/ { s = $2 }
+    fm && /^engineering:/ { e = $2 }
+    NR == at { body = 1; next }
+    body && (/^[[:space:]]*- \[[ x~]\] / || /^## /) { body = 0 }
+    body && /^[[:space:]]+- Tests:/ { t = $0; sub(/^[^:]*:[[:space:]]*/, "", t) }
+    END {
+      if (s ~ /^(standard|full)$/ && e ~ /^(project|product)$/ && t != "" && t !~ /^None([[:space:]]|$)/) print "owed"
+    }' "$TASKS_FILE" 2> /dev/null || true)
+  if [[ "$RED_OWED" == owed ]]; then
+    RED_ON_RECORD=$(awk -v t="$TASK_ID" '
+      /^[[:space:]]*-[[:space:]]+task:/ { v = $0; sub(/^[^:]*:[[:space:]]*/, "", v); gsub(/["'"'"' ]/, "", v); if (v == t) { print "yes"; exit } }
+    ' "$STORY_ABS/.draft/red-evidence.yaml" 2> /dev/null || true)
+    if [[ "$RED_ON_RECORD" != yes ]]; then
+      refuse "box '$TASK_ID' of story '$STORY_ID' cannot close: its Tests field is not None and .draft/red-evidence.yaml holds no entry for it — record the Red (task, target_path, command, failed: true, red_at: assertion, reason) first, then close. Nothing was modified"
+    fi
+  fi
+fi
+
 # --- 2a''. The new reason (--restate) ----------------------------------------
 # Judged here, in --fulfill's place and for its reason: it needs nothing from
 # disk, so a caller whose reason is unusable has to fix that whatever the box

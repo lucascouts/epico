@@ -70,3 +70,9 @@ has() {  # <file> <extended regex> — case-insensitive, names the miss
   has agents/executor.md '--status failed'
   has references/run-mode.md 'failing three times ends the sub-task'
 }
+
+@test "T-own-file: no case is added to a file that holds another sub-task's pre-authored test" {
+  has agents/executor.md 'never add a case to a test file that holds a pre-authored test'
+  has agents/executor.md '(its|their) own file'
+  has references/tasks.md 'never names the file of another sub-task.s pre-authored test'
+}
