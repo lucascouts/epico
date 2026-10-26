@@ -44,3 +44,36 @@ has() {  # <extended regex> — case-insensitive, names the miss
   has '^    final: '
   has 'follows the project.s `\.epico/\.gitpolicy`'
 }
+
+step3() { # the text of Procedure step 3, from its number to step 4's
+  awk '/^3\. \*\*Decisions and rules\.\*\*/ { on = 1 } /^4\. / { on = 0 } on' "$REF"
+}
+
+in_step3() { # <extended regex> — case-insensitive, inside step 3 only
+  if ! step3 | command grep -Eqi -- "$1"; then echo "step 3 does not carry: $1"; return 1; fi
+}
+
+@test "step 3 runs epico-depdiff from the previous checkpoint and asks about each uncovered dependency" {
+  [ -n "$(step3)" ]
+  in_step3 'run `epico-depdiff --base <rev>`'
+  in_step3 'last commit that touched `\.epico/checkpoints/<N-1>\.yaml`'
+  in_step3 'git log -1 --format=%H -- \.epico/checkpoints/<N-1>\.yaml'
+  in_step3 "repository.s first commit"
+  in_step3 'git rev-list --max-parents=0 HEAD'
+  in_step3 'each `uncovered` (entry|dependency)'
+  in_step3 'record an ADR'
+  in_step3 'accept it without one'
+  in_step3 'not a runtime dependency'
+  in_step3 'every `unparsed` manifest'
+  in_step3 '`step: 3` items? in `\.epico/checkpoints/<N>\.yaml`'
+  # still a judgment item, so the dependency question carries no recommendation
+  run bash -c "awk '/^3\\. \\*\\*Decisions/{on=1} /^4\\. /{on=0} on' '$REF' | grep -c 'Recommended'"
+  [ "$output" -eq 0 ]
+  has 'Judgment items\*\* \(steps 2, 3, 4 and 6\)'
+}
+
+@test "step 3 shows an epico-depdiff refusal instead of reading it as no new dependency" {
+  in_step3 'exits 1 or 2'
+  in_step3 'show (its|the) `error`'
+  in_step3 'never (read|treat) (it|a refusal) as (no new dependency|nothing new)'
+}
