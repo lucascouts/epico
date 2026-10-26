@@ -225,3 +225,23 @@ SH
   run bash "$ROOT/scripts/validate-run.sh" --story "$STORY" --only 1.1
   jq -e '.entries[] | select(.id == "1.1") | .detail | test("33 passed, 0 failed")' "$STORY/.draft/validation-run.json"
 }
+
+@test "validate-run: a command holding a <placeholder> is JUDGE, never run" {
+  sed -i 's/`true` exits 0/`touch ran-it \&\& false -j <job>` for each job/' "$STORY/tasks.md"
+  sed -i 's/^- \[ \] Secrets: `true` reports no leaks/- [x] CI mirror: `act -j <job>` for each job/' "$STORY/tasks.md"
+  run bash "$ROOT/scripts/validate-run.sh" --story "$STORY" --only 1.1,gate:CI
+  [ "$(result 1.1)" = JUDGE ]
+  [ "$(result 'CI mirror')" = JUDGE ]
+  [ ! -e "$PROJ/ran-it" ]
+}
+
+@test "validate-run: shell redirection is not a placeholder" {
+  sed -i 's/`true` exits 0/`true <\/dev\/null >\/dev\/null` exits 0/' "$STORY/tasks.md"
+  run bash "$ROOT/scripts/validate-run.sh" --story "$STORY" --only 1.1
+  [ "$(result 1.1)" = PASS ]
+}
+
+@test "rules: a generated gate's first backtick span is the whole command, with no placeholder" {
+  grep -qF 'The first backtick span of a gate is the whole command validate runs' "$ROOT/references/quality-catalog.md"
+  grep -qF 'no `<placeholder>`' "$ROOT/references/quality-catalog.md"
+}
