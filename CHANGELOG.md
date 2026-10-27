@@ -10,6 +10,24 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.24.0] — 2026-10-27
+
+A checkpoint now asks about every runtime dependency the stage added that no decision record names, and the Tech Reviewer walks a fixed set of edge-case questions without a finding quota.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
+### Added
+
+- **`epico-depdiff --base <rev>`** lists the runtime dependencies added between two revisions — `package.json`, `go.mod`, `Cargo.toml`, `pyproject.toml`, `requirements.txt`, `Gemfile` and `composer.json`, read from git objects, never the working tree — and marks each one covered when an ADR under `adr/` or `docs/adr/` names it. Dev, test and build dependencies are not counted, and a manifest it cannot read goes to `unparsed` instead of being half-read.
+- **Checkpoint step 3 asks about each uncovered dependency**, from the previous checkpoint's commit: record an ADR, accept it without one, or mark it as not a runtime dependency. A refusal from `epico-depdiff` is shown, never read as nothing new.
+- **Edge-case questions for the Tech Reviewer** — boundaries, empty and huge input, concurrency, time, partial failure, permissions, retries — each answered in one line in its report. They set no minimum number of findings: zero findings is a valid `PASS`, and the orchestrator never asks for more after one.
+
+### Fixed
+
+- **`epico-validate-run` no longer runs a command holding a `<placeholder>`**, which reported the check as failed; such a span is left to the Auditor. The quality catalog now says a gate's first backtick span is the whole command.
+- **`epico-close` refuses a test-first box whose Red is not on record.** At engineering level `project` or `product`, a Standard or Full sub-task with a `Tests:` field closes only with its entry in `.draft/red-evidence.yaml`, so the gap no longer surfaces first at validation.
+- **New test cases never go into a file holding another sub-task's pre-authored test.** Added there, they made `epico-test-diff` block that sub-task's close.
+
 ## [0.23.1] — 2026-10-24
 
 Memory pages follow the rename to Epico.

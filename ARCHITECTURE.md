@@ -2,7 +2,7 @@
 
 Design-level view of the Epico plugin for contributors and integrators. The [README](README.md) covers *what* Epico is and how to install it; this document covers *how the pieces fit together* and *why*.
 
-- Last verified against: **v0.23.1** (`.claude-plugin/plugin.json`)
+- Last verified against: **v0.24.0** (`.claude-plugin/plugin.json`)
 - If you only want to add a new story mode or tweak an agent prompt, jump to [Extension points](#extension-points).
 
 ---
@@ -210,7 +210,7 @@ The protocol has **six steps**. Steps 2 and 5 are *conditional* — their wordin
 5. **Refactor** (test-first sub-task) **/ Tests** (test-after sub-task) — for a test-first sub-task, improve the implementation while the pre-authored test and the validation command stay green. For a test-after sub-task, create/run the tests listed in the sub-task's `Tests:` field. On failure, STOP.
 6. **Report** — structured report back to the main agent, ending in a machine-liftable **closing block**: the sub-task id, the outcome (`done`, `close-tilde` with a qualifier and a reason, or `failed`), and the pre-authored commit message the executor validated against.
 
-The closing block is where the protocol hands off, and it hands off a *report*, never a write. **The executor marks no box and runs no `git commit`** — marking is script-mediated: the main agent lifts the block into `scripts/close-subtask.sh`, which marks the box, takes the census, stamps `status:` and validates the story in one transaction, and it commits post-merge with the pre-authored message verbatim. A `failed` outcome makes no call at all: the box stays `[ ]`. A box left `[~] (deferred: …)` is discharged later by the same script's `--fulfill` flag — the one exit from a deferral — or has its reason replaced in place by `--restate`, both defined in [references/tasks.md](references/tasks.md#discharging-a-deferral).
+The closing block is where the protocol hands off, and it hands off a *report*, never a write. **The executor marks no box and runs no `git commit`** — marking is script-mediated: the main agent lifts the block into `scripts/close-subtask.sh`, which marks the box, takes the census, stamps `status:` and validates the story in one transaction — and refuses a test-first box whose Red is not in `.draft/red-evidence.yaml` — and it commits post-merge with the pre-authored message verbatim. A `failed` outcome makes no call at all: the box stays `[ ]`. A box left `[~] (deferred: …)` is discharged later by the same script's `--fulfill` flag — the one exit from a deferral — or has its reason replaced in place by `--restate`, both defined in [references/tasks.md](references/tasks.md#discharging-a-deferral).
 
 The main agent does not implement code; the executor does not make scope decisions, and does not write the record of its own completion. This separation is load-bearing for the auditor's effectiveness.
 
