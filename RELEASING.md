@@ -18,6 +18,8 @@ done
 CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1 claude plugin eval . --no-publish --scaffold --allow-tools Skill Bash Write Edit Agent   # evals/README.md
 ```
 
+**Expected — `plugin.json` warns about `CLAUDE.md` in a development checkout.** Claude Code 2.1.312 and later warn that a `CLAUDE.md` at the plugin root is not loaded as plugin context, and `--strict` turns the warning into a failure. That file is the Epico's own managed block for this repository: it is gitignored, so the published plugin has none and a clean clone — CI included — passes. Read the validate result on a clean clone, not on this tree.
+
 **Trap — run `bats` as yourself, not as root.** Some cases make a file unreadable and require the script to refuse. Root can read a `chmod 000` file, so the refusal never fires and those cases report false failures. This is why `act -j bats` (whose image runs as root) is **not** the faithful run.
 
 ## 2. Mirror CI locally
