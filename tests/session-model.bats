@@ -18,8 +18,8 @@ ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   grep -qF 'clarify.md#the-run-model-standard-and-full' "$f"
 }
 
-@test "instant: one line before the work, never a question" {
-  f="$ROOT/references/instant-mode.md"
+@test "lean route: one line before the work, never a question" {
+  f="$ROOT/references/lean-route.md"
   grep -qF '**The model is suggested once, never asked.**' "$f"
   grep -qF 'Then the work starts' "$f"
 }
@@ -30,7 +30,7 @@ ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 }
 
 @test "every suggestion says /model also changes the default, and how to switch for this session only" {
-  for f in triage.md instant-mode.md phase-gates.md; do
+  for f in triage.md lean-route.md phase-gates.md; do
     grep -qF 'default' "$ROOT/references/$f" || { echo "$f: no default note"; return 1; }
     grep -qF 'press `s`' "$ROOT/references/$f" || { echo "$f: no session-only path"; return 1; }
   done

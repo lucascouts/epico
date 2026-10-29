@@ -75,7 +75,7 @@ Do not start the out-of-scope work, and offer an Epico-wrapped version only when
 
 - **Asked once, in the requester's own language**, as an ordinary clarify question: English · the language you wrote to me in · another one. It is a `what` question, not a `how` — the requester is the one who reads the result.
 - **Not asked when the request is already in English** — the answer is not in doubt, and a question whose answer is known is a defect in either register ([Clarify Protocol](#clarify-protocol)).
-- **When no round will run** — `instant`, or a budget already spent — the default is **the language the request was written in**, taken and stated on its line, never the artifacts' English inherited by mistake.
+- **When no round will run** — the lean route, or a budget already spent — the default is **the language the request was written in**, taken and stated on its line, never the artifacts' English inherited by mistake.
 
 ## Validation
 
@@ -166,8 +166,7 @@ $ARGUMENTS parsing:
   → INIT mode (project configuration wizard)
 
 "instant <description>"
-  → CREATE mode, pinned: fast scale, `experiment` level, security floor only,
-    no technical question round (see Instant).
+  → LEAN ROUTE: `experiment`, no story.
 
 "stories migrate NNN [--apply]"
   → MIGRATE mode (legacy story → canonical shapes; writes only with --apply)
@@ -237,7 +236,8 @@ When a command references `NNN`:
 | Mode | Trigger | Reference to load |
 |---|---|---|
 | **Create** | `/epico:epico` or `/epico:epico <description>` | Read [triage.md](../../references/triage.md), then [clarify.md](../../references/clarify.md) when a round runs, then [phase-execution.md](../../references/phase-execution.md) for Standard/Full |
-| **Instant** | `/epico:epico instant <description>` | Read [instant-mode.md](../../references/instant-mode.md), then [triage.md](../../references/triage.md) with its three pins set — no clarify round |
+| **Lean** | Create, triage reads `experiment` | Read [lean-route.md](../../references/lean-route.md) — no story |
+| **Instant** | `/epico:epico instant <description>` | Read [instant-mode.md](../../references/instant-mode.md) — it hands off to Lean |
 | **Migrate** | `/epico:epico stories migrate NNN [--apply]` | Run `epico-migrate`; it writes only with `--apply` |
 | **Batch Create** | `/epico:epico stories create --batch <doc>` | Load [batch-create.md](../../references/batch-create.md) — one interview, N stories; numbers come from `epico-next-number` |
 | **Init** | `/epico:epico init` | Load [init-mode.md](../../references/init-mode.md) |
@@ -256,7 +256,7 @@ When a command references `NNN`:
 
 ## Instant — the disposable-work shortcut
 
-`/epico:epico instant <description>`: **read [instant-mode.md](../../references/instant-mode.md) before anything else** — the three pins, what the shortcut drops and what it must still say.
+`/epico:epico instant <description>`: **read [instant-mode.md](../../references/instant-mode.md) first** — it sets `experiment` and hands off to the [lean route](../../references/lean-route.md).
 
 ## Story Types
 
@@ -267,13 +267,13 @@ When a command references `NNN`:
 
 ## Triage Protocol
 
-**Create and Instant: read [triage.md](../../references/triage.md) now, before anything is written** — the runtime precheck, the three scales, the workflow variants and the triage protocol with its proposal line. Instant reads it with its pins already set.
+**Create: read [triage.md](../../references/triage.md) now, before anything is written** — the runtime precheck, the three scales, the workflow variants and the triage protocol with its proposal line. An `experiment` reading hands off to [lean-route.md](../../references/lean-route.md).
 
 **Then load the requester's register, before the plan is written** — triage reads `requester.level`, and the register is where that level's defaults live: [plain-register.md](../../references/plain-register.md) for a `layperson`, [developer-register.md](../../references/developer-register.md) for a `developer`. Read the whole file; it is short. A layperson's defaults are not optional: tests are written and run in every scale, git is never a question, and nothing technical is asked — skipping the register is how a beginner's program ships with no test.
 
 ## Clarify Protocol
 
-**When a question round runs, read [clarify.md](../../references/clarify.md) first** — Standard and Full always, Fast when the request is ambiguous. Instant never asks and never loads it.
+**When a question round runs, read [clarify.md](../../references/clarify.md) first** — Standard and Full always, Fast when the request is ambiguous. The lean route never loads it.
 
 ## Phase Execution
 

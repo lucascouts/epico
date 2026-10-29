@@ -2,6 +2,8 @@
 
 How long the thing must last decides how much the story pays for — in the quality catalog, in Phase 3, in the size of the plan. The scale ([triage.md](triage.md#adaptive-modes)) says which artifacts are written; the engineering level says how much engineering the work carries. They are independent axes: a Fast story can be a product's one-line fix, a Full story can be an experiment with three tracks.
 
+**`experiment` writes no story.** Triage hands it to the [lean route](lean-route.md) — done directly, the security floor kept, the whole check run before done; the Phase 3 and catalog rows below apply to a story, so they apply from `tool` up. A story's plan, gates and questions buy upkeep, and an `experiment` has none to buy.
+
 This file is the single home of the four levels, their multiples and what each activates. Every consumer cites it and restates nothing but the numbers `tasks.md` owns; recalibrating a multiple is one edit here.
 
 ## The four levels
