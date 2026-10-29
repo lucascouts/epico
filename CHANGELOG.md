@@ -10,6 +10,12 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.25.0] — 2026-10-29
+
+Work at engineering level `experiment` is done directly, with the security floor and no story; the commit guard sees commits on worktree branches.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
 ### Changed
 
 - **Work at engineering level `experiment` takes the lean route and writes no story.** Triage hands it to `references/lean-route.md`: the work is done directly, with no proposal to confirm, no `tasks.md` and no Epico script, while the security floor and the project's whole check before done stay. On the 7-language beginner series it scored as the Fast story did (89 of 100) with less than half the output tokens, about a quarter of the context re-read, about a third of the wall clock and no questions. `tool`, `project` and `product` are unchanged.
@@ -1750,7 +1756,9 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.23.1...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.25.0...HEAD
+[0.25.0]: https://github.com/lucascouts/epico/compare/v0.24.0...v0.25.0
+[0.24.0]: https://github.com/lucascouts/epico/compare/v0.23.1...v0.24.0
 [0.23.1]: https://github.com/lucascouts/epico/compare/v0.23.0...v0.23.1
 [0.23.0]: https://github.com/lucascouts/epico/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/lucascouts/epico/releases/tag/v0.22.0
