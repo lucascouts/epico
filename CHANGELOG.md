@@ -10,6 +10,10 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Fixed
+
+- **The commit guard stays silent in a session that is not running a story.** It blocked the end of every turn in any session opened on a repository with a finished, uncommitted group, even one that never used Epico. It now reads the session's transcript and checks only when a Bash tool call in it ran `epico-close`; with no readable transcript it checks as before.
+
 ## [0.25.0] — 2026-10-29
 
 Work at engineering level `experiment` is done directly, with the security floor and no story; the commit guard sees commits on worktree branches.
