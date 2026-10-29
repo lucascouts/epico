@@ -10,6 +10,10 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Changed
+
+- **The lean route tests every error rule the request states** — bad input, end of input, the data file — and each floor case, before calling the work done. These are the cases a run with no plan forgets first. On the beginner series the lean route rose from 89 to 94 of 100, above the Fast story it replaced, at about two thirds of its output tokens and wall clock; on an expert's precise spec it scored 87, against 86 before.
+
 ### Fixed
 
 - **The commit guard stays silent in a session that is not running a story.** It blocked the end of every turn in any session opened on a repository with a finished, uncommitted group, even one that never used Epico. It now reads the session's transcript and checks only when a Bash tool call in it ran `epico-close`; with no readable transcript it checks as before.
