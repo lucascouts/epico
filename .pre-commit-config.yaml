@@ -11,6 +11,8 @@ repos:
         pass_filenames: false
       - id: shellcheck
         name: shellcheck
-        entry: shellcheck
+        # -x: pre-commit passes only the changed files, so a sourced library
+        # is not among the inputs and SC1091 fires; CI lints all at once.
+        entry: shellcheck -x
         language: system
         files: ^(scripts/.*\.sh|bin/.*)$
