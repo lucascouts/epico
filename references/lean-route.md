@@ -30,7 +30,7 @@ The [security floor](quality-catalog.md#the-security-floor--five-items-no-level-
 
 ## Done means the check passed
 
-Before the work is called done: **automated tests for what was built**, then **the project's whole check** — tests, plus lint or type check where the stack has one — **run and fixed until it passes**. Run the program once the way the requester will.
+Before the work is called done: **automated tests for what was built — one for every rule the request states about bad input, end of input or the data file, and for each floor case** (they are the cases a run that skips the plan forgets first), then **the project's whole check** — tests, plus lint or type check where the stack has one — **run and fixed until it passes**. Run the program once the way the requester will.
 
 ## The closing
 
