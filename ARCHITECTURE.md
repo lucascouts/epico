@@ -2,7 +2,7 @@
 
 Design-level view of the Epico plugin for contributors and integrators. The [README](README.md) covers *what* Epico is and how to install it; this document covers *how the pieces fit together* and *why*.
 
-- Last verified against: **v0.24.0** (`.claude-plugin/plugin.json`)
+- Last verified against: **v0.25.0** (`.claude-plugin/plugin.json`)
 - If you only want to add a new story mode or tweak an agent prompt, jump to [Extension points](#extension-points).
 
 ---
