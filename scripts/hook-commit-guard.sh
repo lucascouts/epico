@@ -32,7 +32,10 @@ ROOT=$(git -C "$CWD" rev-parse --show-toplevel 2>/dev/null || true)
 [ -d "$ROOT/.epico/stories" ] || exit 0
 [ -n "$(git -C "$ROOT" config user.email 2>/dev/null || true)" ] || exit 0
 
-SUBJECTS=$(git -C "$ROOT" log --format=%s 2>/dev/null || true)
+# --all: a run inside a worktree commits on that worktree's branch, which the
+# main tree's HEAD never reaches; HEAD alone blocked every turn and ordered a
+# duplicate commit (seen 26/10, story 247: 10 blocked stops in one session).
+SUBJECTS=$(git -C "$ROOT" log --all --format=%s 2>/dev/null || true)
 
 # missing_commits <tasks.md> — one line per finished group whose Commit message
 # is not a commit subject: "<group>\t<message>". Fenced blocks are documentation.

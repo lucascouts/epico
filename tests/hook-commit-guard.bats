@@ -12,6 +12,7 @@
 #   G8  a fenced example and a Quality Gates section are not groups
 #   G9  hooks.json registers the guard on Stop
 #   G10 a history larger than a pipe buffer still finds the subject (no SIGPIPE false miss)
+#   G11 the commit made on a worktree's branch counts (a run in a worktree commits there)
 
 setup() {
   PLUGIN_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
@@ -132,6 +133,17 @@ EOF
   head -c 200000 /dev/zero | tr '\0' a > "$REPO/.big-subject"
   git -C "$REPO" commit -q --allow-empty -F "$REPO/.big-subject"
   git -C "$REPO" commit -q --allow-empty -m "feat(001): implement the store"
+  run_hook "{\"cwd\": \"$REPO\", \"stop_hook_active\": false}"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
+@test "G11 the commit made on another worktree's branch allows the stop" {
+  write_tasks x x
+  # The story ran in a worktree and committed on its branch; the main tree's
+  # HEAD never sees that commit, and blocking would order a duplicate commit.
+  git -C "$REPO" worktree add -q -b story-001 "$REPO/.wt-001"
+  git -C "$REPO/.wt-001" commit -q --allow-empty -m "feat(001): implement the store"
   run_hook "{\"cwd\": \"$REPO\", \"stop_hook_active\": false}"
   [ "$status" -eq 0 ]
   [ -z "$output" ]
