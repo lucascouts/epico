@@ -13,6 +13,9 @@
 #   G9  hooks.json registers the guard on Stop
 #   G10 a history larger than a pipe buffer still finds the subject (no SIGPIPE false miss)
 #   G11 the commit made on a worktree's branch counts (a run in a worktree commits there)
+#   G12 a readable transcript with no epico-close call → allow (no run in this session)
+#   G13 a transcript whose Bash tool call ran epico-close → block, as with no transcript
+#   G14 epico-close only quoted in a tool result (a reference read) is not a run → allow
 
 setup() {
   PLUGIN_ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
@@ -146,5 +149,35 @@ EOF
   git -C "$REPO/.wt-001" commit -q --allow-empty -m "feat(001): implement the store"
   run_hook "{\"cwd\": \"$REPO\", \"stop_hook_active\": false}"
   [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
+# write_transcript <command> — one assistant turn whose Bash tool call runs <command>,
+# then a tool result quoting run-mode.md, which names epico-close in prose.
+write_transcript() {
+  TRANSCRIPT="$REPO/.transcript.jsonl"
+  jq -cn --arg c "$1" '{type:"assistant",message:{content:[{type:"tool_use",name:"Bash",input:{command:$c}}]}}' > "$TRANSCRIPT"
+  jq -cn '{type:"user",message:{content:[{type:"tool_result",content:"run-mode.md: epico-close <NNN> <N.N> closes one box"}]}}' >> "$TRANSCRIPT"
+}
+
+@test "G12 a session that closed no box owes no commit, whatever tasks.md says" {
+  write_tasks x x
+  write_transcript "git status"
+  run_hook "{\"cwd\": \"$REPO\", \"transcript_path\": \"$TRANSCRIPT\"}"
+  [ "$status" -eq 0 ]
+  [ -z "$output" ]
+}
+
+@test "G13 a session that ran epico-close owes the commit" {
+  write_tasks x x
+  write_transcript "epico-close 001 1.2"
+  run_hook "{\"cwd\": \"$REPO\", \"transcript_path\": \"$TRANSCRIPT\"}"
+  echo "$output" | jq -e '.decision == "block"'
+}
+
+@test "G14 epico-close quoted in a tool result is not a run" {
+  write_tasks x x
+  write_transcript "cat references/run-mode.md"
+  run_hook "{\"cwd\": \"$REPO\", \"transcript_path\": \"$TRANSCRIPT\"}"
   [ -z "$output" ]
 }

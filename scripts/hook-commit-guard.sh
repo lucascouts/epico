@@ -13,6 +13,13 @@
 # message carries the story's anchor; references/run-mode.md, The Commit Field).
 # No such subject in `git log` → block, naming each missing message.
 #
+# Only a session that is running a story owes the commit: when the transcript is
+# readable and no Bash tool call in it ran epico-close (the one way a run closes a
+# box), the session closed nothing and the guard stays silent — a session that
+# merely opens the repository, with a group someone else left uncommitted, is not
+# blocked turn after turn. With no readable transcript the guard cannot tell, and
+# checks as before rather than drop the protection.
+#
 # Fails open, so a guard defect never traps a turn: unreadable input, a second
 # stop attempt (stop_hook_active, the documented loop guard), no git work tree,
 # no .epico/stories, and an empty `git config user.email` — run-mode makes no
@@ -23,7 +30,15 @@ set -euo pipefail
 INPUT=$(cat)
 ACTIVE=$(printf '%s' "$INPUT" | jq -r '.stop_hook_active // false' 2>/dev/null || echo true)
 CWD=$(printf '%s' "$INPUT" | jq -r '.cwd // empty' 2>/dev/null || true)
+TRANSCRIPT=$(printf '%s' "$INPUT" | jq -r '.transcript_path // empty' 2>/dev/null || true)
 [ "$ACTIVE" = "true" ] && exit 0
+TRANSCRIPT="${TRANSCRIPT/#\~/$HOME}"
+if [ -n "$TRANSCRIPT" ] && [ -r "$TRANSCRIPT" ]; then
+  # Captured, not piped into grep -q: the same SIGPIPE trap as SUBJECTS below.
+  CLOSES=$(jq -r 'select(.type == "assistant") | .message.content[]?
+    | select(.type == "tool_use" and .name == "Bash") | .input.command // empty' "$TRANSCRIPT" 2>/dev/null || true)
+  grep -qE '(^|[^[:alnum:]_-])(epico-close|close-subtask\.sh)' <<<"$CLOSES" || exit 0
+fi
 CWD=${CWD:-$PWD}
 [ -d "$CWD" ] || exit 0
 
