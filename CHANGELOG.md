@@ -10,6 +10,12 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.25.1] — 2026-10-29
+
+The lean route tests every error rule the request states; the commit guard checks only a session that is running a story.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
 ### Changed
 
 - **The lean route tests every error rule the request states** — bad input, end of input, the data file — and each floor case, before calling the work done. These are the cases a run with no plan forgets first. On the beginner series the lean route rose from 89 to 94 of 100, above the Fast story it replaced, at about two thirds of its output tokens and wall clock; on an expert's precise spec it scored 87, against 86 before.
@@ -1764,7 +1770,8 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.25.0...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.25.1...HEAD
+[0.25.1]: https://github.com/lucascouts/epico/compare/v0.25.0...v0.25.1
 [0.25.0]: https://github.com/lucascouts/epico/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/lucascouts/epico/compare/v0.23.1...v0.24.0
 [0.23.1]: https://github.com/lucascouts/epico/compare/v0.23.0...v0.23.1
