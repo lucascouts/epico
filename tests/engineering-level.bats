@@ -299,15 +299,25 @@ hasF() { # hasF <label> <block> <fixed string>
   has "E13c floor" "$levels" "security floor"
 }
 
-@test "E14: instant is a shortcut with three pins, never a fourth scale" {
+@test "E14: instant sets experiment and enters the lean route, never a fourth scale" {
   sec=$(cat "$ROOT/references/instant-mode.md")
   [ -n "$sec" ]
-  hasF "E14 scale pin"  "$sec" '`fast`'
   hasF "E14 level pin"  "$sec" '`experiment`'
-  has  "E14 floor pin"  "$sec" "security floor"
+  hasF "E14 lean route" "$sec" 'lean-route.md'
+  has  "E14 no question" "$sec" "no technical question round"
   # The whole point: it is an entrance, not a state. No artifact may carry it.
   has  "E14 not a state" "$sec" "entrance"
-  has  "E14 no question" "$sec" "No technical question round"
+}
+
+@test "E14a: triage hands an experiment to the lean route, which keeps the floor and writes no story" {
+  hasF "E14a handoff" "$(cat "$ROOT/references/triage.md")" 'WHEN it reads `experiment`, stop here and follow [lean-route.md](lean-route.md)'
+  lean=$(cat "$ROOT/references/lean-route.md")
+  has  "E14a no story" "$lean" "No story"
+  has  "E14a floor"    "$lean" "security floor"
+  has  "E14a check"    "$lean" "whole check"
+  # A run of an existing story never drops to the lean route, whatever its level.
+  has  "E14a not inside" "$lean" "Never inside an existing story"
+  grep -q '| \*\*Lean\*\* |' "$ROOT/skills/epico/SKILL.md"
 }
 
 @test "E14b: instant is routed — grammar arm and dispatch row both exist" {
@@ -365,11 +375,10 @@ hasF() { # hasF <label> <block> <fixed string>
   has "E18 count" "$floor" "five items no level drops"
 }
 
-@test "E19: instant declares what it drops, and the report carries it" {
-  sec=$(cat "$ROOT/references/instant-mode.md")
-  has "E19 cost" "$sec" "drops protections"
+@test "E19: the lean route's closing names every protection it dropped alone" {
+  sec=$(cat "$ROOT/references/lean-route.md")
   has "E19 report" "$sec" "reduces protection or documentation"
-  has "E19 not only plan" "$sec" "not only in the plan"
+  has "E19 read, not bitten" "$sec" "never by being bitten"
 }
 
 @test "E20: the report never states the multiple the run achieved" {
