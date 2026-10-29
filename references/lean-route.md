@@ -25,7 +25,7 @@ The [security floor](quality-catalog.md#the-security-floor--five-items-no-level-
 - **Secrets** — none in the tree.
 - **README** — how to run it and how to check it, two lines at least.
 - **Dependencies** — prefer none; any added has no known vulnerability. No dependencies is a verdict, not a failure.
-- **Data integrity**, when the program writes a file it reads back — written through a temporary file renamed over the target; a missing file and a corrupted file each start the program without a crash and without overwriting the original (a corrupted file is set aside under a timestamped name); a save that fails says so. Tests prove these cases.
+- **Data integrity**, when the program writes a file it reads back — written through a temporary file renamed over the target; a missing file and a corrupted file each start the program without a crash and without overwriting the original. A file that parses but has the wrong shape counts as corrupted; a corrupted file is set aside under a timestamped name, never over an earlier one; a save that fails says so. Tests prove these cases.
 - **Commit** — when the folder is a git repository with an identity, commit the work, staging files by name. With no repository or no identity, say so in the closing instead; git is never a question for a `layperson`.
 
 ## Done means the check passed
