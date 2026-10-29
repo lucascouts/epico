@@ -10,6 +10,15 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Changed
+
+- **Work at engineering level `experiment` takes the lean route and writes no story.** Triage hands it to `references/lean-route.md`: the work is done directly, with no proposal to confirm, no `tasks.md` and no Epico script, while the security floor and the project's whole check before done stay. On the 7-language beginner series it scored as the Fast story did (89 of 100) with less than half the output tokens, about a quarter of the context re-read, about a third of the wall clock and no questions. `tool`, `project` and `product` are unchanged.
+- **`instant` is the lean route's direct entrance**: it sets `experiment` without reading it, and writes no story either.
+
+### Fixed
+
+- **The commit guard finds a commit made on a worktree's branch.** It read only the main tree's `HEAD`, so a group committed in a worktree blocked every turn and asked for a duplicate commit.
+
 ## [0.24.0] — 2026-10-27
 
 A checkpoint now asks about every runtime dependency the stage added that no decision record names, and the Tech Reviewer walks a fixed set of edge-case questions without a finding quota.
