@@ -80,7 +80,7 @@ Its LLM work — the consolidation that turns raw observations into pages, the l
 |---|---|---|
 | Triage / Phase 1 — [context-discovery.md](context-discovery.md#prior-knowledge) | `memory_recent` (5) and one `memory_query` built from the request's own nouns, and one `global: true` query for `gotcha`/`research` pages on the detected techs | — |
 | Run — [run-mode.md](run-mode.md#procedure) | one `memory_query` per run for prior deviations, discoveries and gotchas on the detected techs, passed to every Executor as Project State | at End of Run, the deviation register as one page: `epico/deviation/NNN-<slug>.md`; each discovery tagged with a technology as a `gotcha` page — to `_global` (see Typed pages) |
-| Run with `--auto` — [run-mode.md](run-mode.md#assumptions-under---auto) | — | the assumptions the run made, as one page: `epico/decision/NNN-auto-assumptions.md` |
+| Run with `--auto` — [run-end.md](run-end.md#assumptions-under---auto) | — | the assumptions the run made, as one page: `epico/decision/NNN-auto-assumptions.md` |
 | Validate — [validate-mode.md](validate-mode.md#auditor-sub-agent) | prior structural audit findings, handed to the Auditor as things to verify | after the verdict, one page per structural finding: `epico/finding/NNN-<subject>.md` |
 
 ### Typed pages

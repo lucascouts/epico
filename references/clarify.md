@@ -23,12 +23,9 @@ the plain register, and both get the context and the example.
   it, what exists today, what "done" looks like — or one open question in
   the requester's own words: "describe it as you would to a friend".
   Skipped when the request already answers them; a question the request
-  answered is a defect in either register. When triage could not settle
-  the engineering level, this round carries its indirect questions — will
-  you open this again, when it breaks do you fix it or redo it, will anyone
-  besides you run it, could it be published or sold
-  ([engineering-level.md](engineering-level.md)) — asked as
-  consequences, inside the same count.
+  answered is a defect in either register. The engineering level is never
+  among them: triage infers it and the proposal line lets the requester
+  move it ([engineering-level.md](engineering-level.md#how-the-level-is-read)).
 - **Ask the consequence, never the mechanism.** "What happens to the data
   when the program closes?" decides persistence; "JSON or SQLite?" asks the
   requester to be the architect. The consequence is what they can observe
@@ -72,13 +69,13 @@ the plain register, and both get the context and the example.
   table, write each decision as an assumption in story.md (Fast: in the run
   report) and proceed. Infinite clarification defeats the purpose — and so
   does a question the requester cannot answer.
-- **The interface language is a question, never an inheritance.** When the
-  request is not in English and the story ships something a person reads on
-  screen, ask which language its menu, prompts, messages and README are in —
-  in the requester's own language, one question, three options: English, the
-  language they wrote in, another. Not asked when the request is
-  already in English. The artifacts stay English either way
-  ([Language](../skills/epico/SKILL.md#language)).
+- **The interface language is inferred, never asked** — its menu, prompts,
+  messages and README speak the language the request was written in, stated
+  on the proposal line. Asked only when it is in doubt: the request mixes languages
+  or names readers who speak another one — in the requester's own language,
+  one question, three options: English, the language they wrote in, another.
+  Not asked when the request is already in English. The artifacts stay
+  English either way ([Language](../skills/epico/SKILL.md#language)).
 - For each ambiguity, build a question with **2–4 mutually-exclusive options**.
   When the answer is binary, prefer `[yes / no / out-of-scope]` over open
   phrasings.
@@ -124,7 +121,7 @@ options:
     description: "The cheapest; writes fewer tests and skips more of the delivery details"
 ```
 
-The answer is written to `tasks.md` as `run-model: sonnet | opus | haiku` ([tasks.md](tasks.md)). **Fast and spike do not ask**: they create and run in one sitting, with no session in between to open on another model. Under `--auto` or headless the question is not asked and no `run-model:` is written — the run uses whatever session runs it. For a `layperson`, the question is asked in the plain register: what each option costs and gets them, in their words, and the model names carry their legend.
+The answer is written to `tasks.md` as `run-model: sonnet | opus | haiku` ([tasks.md](tasks.md)). **Fast and spike do not ask**: they create and run in one sitting, with no session in between to open on another model. Under `--auto` or headless the question is not asked and no `run-model:` is written — the run uses whatever session runs it. **A `layperson` is never asked it**: a model is a choice they cannot weigh, so no `run-model:` is written and the story runs in the session that created it ([phase-gates.md](phase-gates.md#handing-off-to-run)).
 
 ### The ROADMAP tasks (only when the project numbers them)
 

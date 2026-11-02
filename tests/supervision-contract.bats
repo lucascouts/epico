@@ -26,7 +26,7 @@ has() {  # <file> <extended regex> — case-insensitive, names the miss
   has references/mcp-integration.md '`causes`, `fixes`, `contradicts`, `supersedes`'
   has references/mcp-integration.md 'only `gotcha` and `research` pages that carry a `tech:`'
   has references/context-discovery.md 'global: true'
-  has references/run-mode.md 'epico/deviation/NNN'
+  has references/run-end.md 'epico/deviation/NNN'
   has references/validate-mode.md 'epico/finding/NNN'
 }
 

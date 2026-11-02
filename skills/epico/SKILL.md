@@ -71,11 +71,11 @@ Do not start the out-of-scope work, and offer an Epico-wrapped version only when
 - **Code identifiers and comments the Epico writes**: English. A comment in the user's language only when they ask, on the line below the English one.
 - **What the requester's own users read**: the program's interface — menu, prompts, error messages — and the documentation of how to use it (its README). **This is the one thing the English rule does not cover**, and it is not the Epico's to decide: it belongs to whoever will read it.
 
-**The interface language is asked, not assumed.** A request written in a language other than English carries no instruction about the program's own text, and the English rule above is about artifacts. So:
+**The interface language is inferred, not asked.** A request written in a language other than English says who reads the program, and the English rule above is about artifacts. So:
 
-- **Asked once, in the requester's own language**, as an ordinary clarify question: English · the language you wrote to me in · another one. It is a `what` question, not a `how` — the requester is the one who reads the result.
-- **Not asked when the request is already in English** — the answer is not in doubt, and a question whose answer is known is a defect in either register ([Clarify Protocol](#clarify-protocol)).
-- **When no round will run** — the lean route, or a budget already spent — the default is **the language the request was written in**, taken and stated on its line, never the artifacts' English inherited by mistake.
+- **The interface speaks the language the request was written in**, taken and stated on its line, never the artifacts' English inherited by mistake.
+- **Asked once, in the requester's own language, only when it is in doubt**: the request mixes languages, or names readers who speak another one. Three options: English · the language you wrote to me in · another one ([Clarify Protocol](#clarify-protocol)).
+- **Not asked when the request is already in English** — the answer is not in doubt, and a question whose answer is known is a defect in either register.
 
 ## Validation
 
@@ -103,7 +103,7 @@ Its JSON `mapping` field gives the requirement → sub-tasks relation directly �
 - Requirements: number hierarchically (R1, R1.1, R1.2, R2...)
 - Bugfix: Unchanged Behavior section is **mandatory**, minimum 2 items
 - Fast mode is test-first at run time: a sub-task with a `Tests` field is authored Red, then Green-then-Refactor; a sub-task with no testable logic carries an `Acceptance` field (1-3 observable-behavior statements) instead — every implementing (non-Commit) sub-task carries one or the other
-- **A run that finishes a story ends with an `AskUserQuestion`** when callable: one step (refine, run the rest or validate) plus *Stop here*; archive only after a passing validate. `--auto` takes the recommended step and logs it. See [End of Run](../../references/run-mode.md#end-of-run--next-step-index)
+- **A run that finishes a story ends with an `AskUserQuestion`** when callable: one step (refine, run the rest or validate) plus *Stop here*; archive only after a passing validate. `--auto` takes the recommended step and logs it. See [End of Run](../../references/run-end.md#end-of-run--next-step-index)
 - Fast → Standard upgrade: recommend it at triage or task generation when scope grows, **or** when the change needs requirement traceability or design documentation — Fast has neither
 - Constitution constraints are soft — warnings, not blocks
 - A `layperson` build turn writes no text between tool calls — no status line in any language; notes go to `run-report.md`, the chat gets the closing message, checked with `epico-jargon` first

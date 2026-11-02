@@ -6,7 +6,7 @@
 ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 
 @test "triage: Fast and Spike carry a Model line only when the session is not on Sonnet" {
-  grep -qF '> - **Model:** (Fast and Spike, only when this session is not on Sonnet)' "$ROOT/references/triage.md"
+  grep -qF '> - **Model:** (Fast and Spike, only when this session is not on Sonnet; never for a `layperson`)' "$ROOT/references/triage.md"
   grep -qF 'switch this session with `/model sonnet`' "$ROOT/references/triage.md"
   grep -qF '`claude --model sonnet`' "$ROOT/references/triage.md"
 }
@@ -20,7 +20,7 @@ ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 
 @test "lean route: one line before the work, never a question" {
   f="$ROOT/references/lean-route.md"
-  grep -qF '**The model is suggested once, never asked.**' "$f"
+  grep -qF '**The model is suggested once, never asked — and never for a `layperson`.**' "$f"
   grep -qF 'Then the work starts' "$f"
 }
 

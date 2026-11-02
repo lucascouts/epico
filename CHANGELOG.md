@@ -10,6 +10,28 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+The 2026-10-30 SDD battery's P1 verdict: inferences replace three questions, every run ends with a converge pass, and a beginner's closing has a ceiling.
+
+### Added
+
+- **A converge pass ends every run** — the lean route and a story run re-read the request and the floor against what was built; a gap is fixed only after a command reproduces it, and the pass stops at the first one that finds nothing (at most two).
+- **`hook-language-guard.sh` (Stop)**: in a session that invoked the epico, an English sentence that reached a requester writing in another language blocks the end of the turn once, and the closing says it again in their language — a rewrite, not a legend.
+- **`epico-jargon --max-chars <n>`**: fails a text longer than n characters. A beginner's closing is checked with 600.
+
+### Changed
+
+- **The engineering level is inferred from the whole request, never asked** — stated on the proposal line with how to move it. Using a thing again is not upkeep: a request to keep or reuse something is an `experiment`. A beginner whose request does not settle the level takes the lean route; anyone else takes `tool`. In the battery the asked question chose a 3–5 or a 12–17 minute route by chance.
+- **Nothing leaves the machine unless the requester asked for that exact step** — no upload, push, outside login or message, nothing written or deleted outside the project. A check run had uploaded a beginner's project to a public file host after a yes/no question.
+- **The interface language is the request's language, stated, not asked** — asked only when the request mixes languages or names readers of another one.
+- **Failure cases are listed before the code, one test each**; a case whose test never ran keeps its box open.
+- **A web page is checked at the URL its own server printed**, with `curl`, before it is called working.
+- **"See it running" shows the output as text** before the next question — never a question right after a question.
+- `run-mode.md` is split into `run-status.md` (status transitions) and `run-end.md` (end of run); every reference, skill and agent stays under 500 lines, and a test holds them there.
+
+### Removed
+
+- **No model hint, model choice or run command for a beginner** — the Sonnet line, the run-model question and the `/model` handoff are developer-only.
+
 ## [0.25.1] — 2026-10-29
 
 The lean route tests every error rule the request states; the commit guard checks only a session that is running a story.

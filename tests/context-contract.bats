@@ -29,7 +29,7 @@ has() {  # <file> <extended regex> — case-insensitive, names the miss
 @test "X2: the band is read after every group; degraded stops with run all; 400k on 1M; 1M opt-out honoured" {
   has references/run-mode.md 'context band is read after every task group'
   has references/run-mode.md 'stories NNN run all'
-  has references/run-mode.md '≤ 400k'
+  has references/run-end.md '≤ 400k'
   has scripts/story-telemetry.sh 'CLAUDE_CODE_DISABLE_1M_CONTEXT'
   has scripts/story-telemetry.sh 'e: 400000'
 }

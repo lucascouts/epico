@@ -10,7 +10,7 @@ Loaded by the modes that write or read `status:` — Run, Validate, Supersede, A
 |---|---|
 | `draft` | CREATE — when the artifacts are first written |
 | `in-progress` | RUN — when execution of the story starts, written by `scripts/close-subtask.sh` inside the close; RUN **or** REFINE when a census finds open work on a story reading `done` or `validated` (the reopen edge) — REFINE performs that one `Edit` itself, since a refinement adds boxes and closes none |
-| `done` | RUN — written by `scripts/close-subtask.sh` when a marking satisfies rule 1 of the [status transition table](run-mode.md#status-transitions); a deferred `[~]` blocks it |
+| `done` | RUN — written by `scripts/close-subtask.sh` when a marking satisfies rule 1 of the [status transition table](run-status.md#status-transitions); a deferred `[~]` blocks it |
 | `validated` | VALIDATE — after the validation and the audit pass |
 | `superseded` | the supersede operation |
 | `archived` | the archive operation |

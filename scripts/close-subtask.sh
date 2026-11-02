@@ -1646,7 +1646,7 @@ if [[ -z "$STATUS_FROM" ]]; then
 fi
 
 # --- 3c. The four transition rules -------------------------------------------
-# references/run-mode.md#status-transitions, FIRST MATCH WINS, in the documented
+# references/run-status.md#status-transitions, FIRST MATCH WINS, in the documented
 # order — which is why this is one if/elif chain and not three independent
 # tests. Rule 2 sits BELOW rule 1 on purpose: a marking that re-completes a
 # reopened story writes `done` rather than recording a reopen that the same
