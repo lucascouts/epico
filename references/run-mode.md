@@ -43,7 +43,7 @@ Parse flags from `$ARGUMENTS` after the run command:
 | Flag | Behavior |
 |---|---|
 | (default) | Standard and Full: gate after every task group. **Fast runs as `--auto`**: it stops on a validation or test failure and on a doubt the constitution defaults do not cover, and nowhere else — a Fast story is small enough to see whole at the end, and a per-group gate would spend one round of the question budget on "go on" |
-| `--auto` | Only stop on a failure. Group gates, doubts the constitution covers, doubts it does not, and the end-of-run question take the recommended option, each logged as an assumption (see [Assumptions under `--auto`](#assumptions-under---auto)) |
+| `--auto` | Only stop on a failure. Group gates, doubts the constitution covers, doubts it does not, and the end-of-run question take the recommended option, each logged as an assumption (see [Assumptions under `--auto`](run-end.md#assumptions-under---auto)) |
 | `--step` | Gate after every task group in a Fast run — the one way to ask a Fast story for its stops back |
 | `--batch=N` | Gate every N task groups |
 | `--gate=commit` | Gate only where a group's `Commit:` field is executed |
@@ -133,7 +133,7 @@ For a sub-task of any of them carrying a `Tests` field, the test is authored, ru
 3. **Green** — implement until the test passes and the Validation command passes.
 4. **Refactor** — improve the code while keeping the test and Validation green; revert any refactor that breaks either.
 
-None of them authors tests at plan time — there is no Test Advisor sub-agent, no `.draft/authored-tests/`, and no `red-evidence.yaml`. Test authorship is done by the **main agent** at run time (the `test-advisor` sub-agent is not spawned), and the authored test is written **directly into the project's real test tree** — no `.draft/` staging, which is why step 7 (Materialize pre-authored tests) does not apply to any of them. Red confirmation lives in the run report only; it is not persisted to a file. **For a `layperson` requester it lives there and nowhere else — and what keeps it there is form, not vocabulary: between tool calls, a build turn writes nothing to the chat.** Each step's note — the test authored, its Red and why it was valid, the Green — is collected as it happens and written into `run-report.md` **once, at the end of the turn**: `epico-run-report --story <dir>` writes the skeleton — the recorded line, one line per closed box, the gates, the commits — and one `Edit` adds the notes no file holds, not an `Edit` per step, and not announced in the chat. The turn's only visible text is its closing three lines — and, on the turn that finishes the run, the next-step question after them ([End of Run](#end-of-run--next-step-index)). A vocabulary rule alone does not hold this line — forbidden words leak in the interstitial text, never in the closing message ([plain-register.md](plain-register.md#ceiling-per-turn)); the form rule is what removes the place they leak into. This mirrors the "Plan time vs run time" note in `phase-gates.md` — the Test Advisor Lite checklist decides *whether* a test is needed; this section is *when* the test-first ordering happens.
+None of them authors tests at plan time — there is no Test Advisor sub-agent, no `.draft/authored-tests/`, and no `red-evidence.yaml`. Test authorship is done by the **main agent** at run time (the `test-advisor` sub-agent is not spawned), and the authored test is written **directly into the project's real test tree** — no `.draft/` staging, which is why step 7 (Materialize pre-authored tests) does not apply to any of them. Red confirmation lives in the run report only; it is not persisted to a file. **For a `layperson` requester it lives there and nowhere else — and what keeps it there is form, not vocabulary: between tool calls, a build turn writes nothing to the chat.** Each step's note — the test authored, its Red and why it was valid, the Green — is collected as it happens and written into `run-report.md` **once, at the end of the turn**: `epico-run-report --story <dir>` writes the skeleton — the recorded line, one line per closed box, the gates, the commits — and one `Edit` adds the notes no file holds, not an `Edit` per step, and not announced in the chat. The turn's only visible text is its closing three lines — and, on the turn that finishes the run, the next-step question after them ([End of Run](run-end.md#end-of-run--next-step-index)). A vocabulary rule alone does not hold this line — forbidden words leak in the interstitial text, never in the closing message ([plain-register.md](plain-register.md#ceiling-per-turn)); the form rule is what removes the place they leak into. This mirrors the "Plan time vs run time" note in `phase-gates.md` — the Test Advisor Lite checklist decides *whether* a test is needed; this section is *when* the test-first ordering happens.
 
 A sub-task with no `Tests` field is implemented against its `Acceptance` field plus the Validation command — no test is authored. **The two scales differ in what may be absent**: Fast requires one of `Tests` or `Acceptance` on every implementing sub-task, while a spike may carry neither ([tasks.md](tasks.md#spike-scale-adaptations)) — probe code is throwaway and the Verdict is the deliverable. A spike sub-task carrying only `Validation` is therefore well-formed, and is implemented against that alone. A Standard or Full story at `experiment` or `tool` anchors a structural sub-task on its `Requirements` field with `Tests: None`, and at `experiment` may omit the field, like a spike.
 
@@ -250,128 +250,7 @@ A refusal names its own reason in `reason`, and each arm is a statement about th
 
 ### Status Transitions
 
-The story's `status:` frontmatter field is **engine-written, never hand-edited**. Run mode owns two of the six values — `in-progress` and `done` — and writes them right after a box in tasks.md is marked. The other four belong elsewhere and Run mode never writes them: `draft` to CREATE, `validated` to VALIDATE, `superseded` to the supersede operation, `archived` to the archive operation. `in-progress` has one further writer, and only for one edge: REFINE mode, when a refinement reopens a story — the table below is the single definition both modes apply. See [lifecycle-status.md](lifecycle-status.md#lifecycle-status-status) for the full field spec.
-
-**When the check runs:** after **every** marking in tasks.md — each sub-task marking, whichever route executed the sub-task (inline or Executor, step 7 above), and the end-of-Run quality-gate settlement, which is usually the marking that closes the last box.
-
-**In Run mode, `close-subtask.sh` runs it** — census and table both, inside the same invocation that closed the box (see Closing a Box), so a marking and its status can never be left apart. The orchestrator reads the outcome from the JSON's `status_written` and takes no census of its own. **Refine mode takes the same census by hand**, at its own point (see [refine-mode.md](refine-mode.md#status-census)): a refinement does not mark boxes, it **adds** them — which is the one way a story that already reads `done` gains open work, and there is no close call to carry the write, so REFINE performs the `Edit` itself. The table below is one definition with two performers, never two tables.
-
-Census the boxes **as they now stand** — `open`, `closed` and `deferred` are defined once, in [tasks.md](tasks.md#completion), and the census spans the task list **and** the Quality Gates — then apply the first rule that matches:
-
-| # | After the census | Then |
-|---|---|---|
-| 1 | no `[ ]` remains **and** no `[~] (deferred: …)` remains | write `done` (nothing to do if the field already reads `done`) |
-| 2 | rule 1 did not fire, at least one `[ ]` remains, and `status:` reads **`done` or `validated`** | write `in-progress` — the story was **reopened** |
-| 3 | rules 1–2 did not fire, and `status:` is **absent or `draft`** | write `in-progress` |
-| 4 | none fired | write nothing |
-
-Rule 1 is the canonical **`done`**: "every box is `[x]` or terminal `[~]`" and "no `[ ]` and no deferred `[~]`" are the same condition read from its two ends (see [tasks.md](tasks.md#completion) — do not restate it as a third variant). Rule 2 is the **reopen** edge, and it sits *below* rule 1 on purpose: a marking that re-completes the story still writes `done`, so reopening is only ever recorded when work is genuinely open again. Rule 3 is the first marking of a story that has not been executed before: absence and `draft` are the two states a run can start from. Rule 4 keeps a story already `in-progress` where it is — the transition is written once, not re-affirmed on every sub-task. A marking that satisfies rule 1 on a story that had reached `validated` writes `done`: work done after a validation is work that validation did not cover, and VALIDATE earns `validated` back on its next pass.
-
-**Reopening is defined by `[ ]`, and only by `[ ]`.** Rule 2 fires on an open box, never on a deferred one — a `done` story that gains a `[~] (deferred: …)` box is not reopened by it, because nobody here owes that work. This is the same reading `validate-story.sh` applies to its ahead-of-checkboxes warning, and it is why the two agree: rule 2 exists precisely so the engine never leaves behind the `done`-with-an-open-box state that warning exists to expose.
-
-**A deferred box blocks `done` — deliberately.** A story whose only remaining non-`[x]` boxes are `[~] (deferred: …)` does **not** get `status: done` from Run mode. Its status stays `in-progress`. Its completeness is visible as the computed condition **`done-except-external`**, which is derived from the boxes at read time and never persisted — LIST renders it `in-progress · done-except-external (N deferred)`. The persisted enum has no value for that condition, and that is deliberate, not an omission: the work is settled in the plan and still owed in the world, so the lifecycle state must not claim the story is finished.
-
-**Writing the transition.** The five rules below are what the write must satisfy, **whoever performs it**. Run mode performs none of them by hand — `close-subtask.sh` does, inside the close — while REFINE and VALIDATE cite this list as the single definition and perform the `Edit` themselves:
-
-1. **`Edit` the frontmatter line — never `Write` the file.** The PostToolUse hook in `hooks/hooks.json` matches **`Write` only**: a `Write` under `.epico/**` re-runs `validate-story.sh`. Transitions written with `Write` would fire a full validation pass after every marking — a validation storm on an advisory metadata update. An `Edit` of the single `status:` line does not trigger the hook. `close-subtask.sh` satisfies the same requirement from the other side: it replaces that one line through a temp file renamed into place, and a Bash write fires **no** PostToolUse hook at all — which is why the script runs `validate-story.sh` once itself, after the marking and the stamp, and reports the verdict in the JSON's `validate` field.
-2. **The same value in every artifact of the story that carries frontmatter** — `story.md`, `design.md`, `tasks.md`, whichever exist (a Fast story has only tasks.md). One story, one lifecycle state: artifacts declaring different values raise a validation warning naming them. An artifact with no frontmatter is skipped — there is no line to edit, and its silence is never counted as divergence.
-3. **Legacy story with no `status:` field — the `Edit` adds it.** Most existing stories predate the field; absence is legal, silent, and never an error. Insert `status: <value>` as a new line inside the frontmatter block, before the closing `---`, in each artifact that has one.
-4. **Add only the state this run observed.** The value added is what the engine just saw: a marking that leaves work open is `in-progress`; a marking that satisfies rule 1 is `done`; a census that finds open work on a story reading `done` or `validated` is `in-progress` again. Never back-date `draft` onto a story the engine never saw created, and never write an intermediate value the run did not observe — a legacy story whose first marking also completes it goes straight from no field to `done`, in one write. The field is worth having only because it is evidence; a fabricated prior state is exactly the lie it exists to prevent.
-5. **A failed write is reported, and the run continues.** If an `Edit` cannot be applied — no frontmatter block, the line is not where expected, a concurrent edit conflicts — report it in the Run output and carry on. `status:` is advisory metadata and must never block the run that is producing the actual work.
-
-**Dry run.** `042-legacy-import`: three artifacts (`story.md`, `design.md`, `tasks.md`), none carrying `status:` — a legacy story.
-
-```
-tasks.md at the start                       status: in all three artifacts
-
-- [ ] 1 - Import pipeline                   (absent)
-  - [ ] 1.1 - Parse the vendor CSV
-  - [ ] 1.2 - Load into staging
-- [ ] 2 - Cutover
-  - [ ] 2.1 - Switch the production reader
-## Quality Gates
-- [ ] Schema diff reviewed by the data owner
-- [ ] Load test at 1k rps
-
-1. Run starts. Nothing closed yet -> no call, no census, no write.
-   status: still absent. CREATE never ran on this story, so there is no `draft`
-   to back-date: the run has observed nothing, so it records nothing.
-
-2. 1.1 passes its reviews -> close-subtask.sh 042 1.1
-   {"box":"x","census":{"total":7,"open":6,"closed":1,"deferred":0},
-    "status_written":{"from":null,"to":"in-progress"},
-    "validate":{"errors":0,"warnings":0,"status":"pass"}}
-   6 open, 0 deferred -> rule 1 no. status: absent -> rule 2 no
-   (nothing to reopen) -> RULE 3. The script stamps `status: in-progress` into
-   story.md, design.md and tasks.md; `from` is null because there was no field
-   to move, not because the write was skipped.
-
-3. 1.2 passes -> close-subtask.sh 042 1.2
-   {"box":"x","census":{"total":7,"open":4,"closed":3,"deferred":0},
-    "status_written":null,"validate":{"errors":0,"warnings":0,"status":"pass"}}
-   closed went 1 -> 3 in ONE call: `- [x] 1` closed in the same write as its
-   last open child, so no second call names the header.
-   4 open -> rule 1 no. status: in-progress -> rules 2 and 3 no. RULE 4:
-   nothing written, which is what status_written null reports.
-
-4. 2.1 passes -> close-subtask.sh 042 2.1
-   {"box":"x","census":{"total":7,"open":2,"closed":5,"deferred":0},
-    "status_written":null,"validate":{"errors":0,"warnings":0,"status":"pass"}}
-   `- [x] 2` closed with it. 2 open (both Quality Gates). RULE 4.
-
-5. End-of-Run quality gates settled, one call per gate:
-   epico-close 042 "gate:Schema diff reviewed by the data owner"
-   {"box":"x","census":{"total":7,"open":1,"closed":6,"deferred":0},
-    "status_written":null,"validate":{"errors":0,"warnings":0,"status":"pass"}}
-   epico-close 042 "gate:Load test at 1k rps" \
-     --tilde "waived: no load-test rig on this host — user decision"
-   {"box":"~","qualifier":"waived",
-    "census":{"total":7,"open":0,"closed":7,"deferred":0},
-    "status_written":{"from":"in-progress","to":"done"},
-    "validate":{"errors":0,"warnings":0,"status":"pass"}}
-   0 open, 0 deferred (the waived gate is terminal, so it counts closed)
-   -> RULE 1. status: in-progress -> done in all three artifacts, and
-   status_written.to == "done" is what makes the next step Validate.
-```
-
-The same run, with one box deferred instead:
-
-```
-4'. 2.1 cannot be executed here — the vendor's production account does not exist
-    yet. The Executor reports outcome close-tilde, and the orchestrator lifts it:
-    epico-close 042 2.1 \
-      --tilde "deferred: needs the vendor's production account"
-    {"box":"~","qualifier":"deferred",
-     "census":{"total":7,"open":2,"closed":4,"deferred":1},
-     "status_written":null,"validate":{"errors":0,"warnings":0,"status":"pass"}}
-    `- [x] 2` still closes with it: a deferred child is not an OPEN child.
-
-5'. Quality gates settled exactly as in step 5. The last call returns
-    {"census":{"total":7,"open":0,"closed":6,"deferred":1},
-     "status_written":null,"validate":{"errors":0,"warnings":0,"status":"pass"}}
-    0 open, 1 deferred -> rule 1 does NOT fire.
-    status: in-progress -> rules 2 and 3 no. RULE 4: nothing written.
-    The story stays `in-progress`. LIST renders it
-    `in-progress · done-except-external (1 deferred)`.
-    status_written is null on every call of this run; the next step is still
-    Validate, which can take the in-progress -> validated edge.
-```
-
-And the reopen edge, on the story left at `done` by step 5:
-
-```
-6. A Refine adds a task the story did not have:
-   `- [ ] 3 - Backfill the rows the first import dropped`.
-
-   Census (refine-mode, after the merged tasks.md is written — taken BY HAND:
-   a refinement adds boxes and closes none, so there is no call to carry it):
-   1 open, 0 deferred -> rule 1 no. status: done + an open [ ] -> RULE 2.
-   Edit all three artifacts: status: done -> in-progress.
-   validate-story.sh -> 0 errors, 0 warnings — without this write it would
-   report "status is ahead of the checkboxes".
-```
-
-Metadata lines and the `Objective`, `Validation`, `Requirements` and `Commit` fields are elided from all three listings: they carry no checkbox and never enter the census. The JSON objects are elided too, to their load-bearing fields — every call also returns `story`, `task` and `reason`.
+Every marking can move the story's `status:` field. **Read [run-status.md](run-status.md#status-transitions) before the first close** — the transition table, the census that feeds it and the write mechanism live there.
 
 ### The Commit Field
 
@@ -553,7 +432,7 @@ discoveries:
     finding: "Variables in {% if %} must exist in context — default filter only works in {{ }}"
 ```
 
-Either kind of entry carries the optional boolean field `follow_up: true` when it leaves work the run did not do — a correction, an adjustment or a refactor the code now owes, or a story, design or task list that no longer describes what was built. The orchestrator sets it when it records the entry, from the Executor's report; an entry that only explains a choice already made leaves it absent. It is what the end-of-run question reads to recommend Refine ([End of Run](#end-of-run--next-step-index)), so a pending fix is a field, not a judgment made at the end.
+Either kind of entry carries the optional boolean field `follow_up: true` when it leaves work the run did not do — a correction, an adjustment or a refactor the code now owes, or a story, design or task list that no longer describes what was built. The orchestrator sets it when it records the entry, from the Executor's report; an entry that only explains a choice already made leaves it absent. It is what the end-of-run question reads to recommend Refine ([End of Run](run-end.md#end-of-run--next-step-index)), so a pending fix is a field, not a judgment made at the end.
 
 **A box whose test was rewritten does not close.** When a sub-task has a `red-evidence.yaml` entry, `close-subtask.sh` runs `epico-test-diff` on its `target_path` before marking `[x]`: setup edits pass, an assertion line changed, removed or added refuses the close, and nothing is written. Report that refusal as the sub-task's failure — never restore the box by hand, and never close it `[~]` to get past it. The release is the user's, through refine ([refine-mode.md](refine-mode.md#releasing-a-test-blocked-by-epico-test-diff)).
 
@@ -572,19 +451,21 @@ Two or more pending tasks whose dependencies are all satisfied may run at once, 
 
 - **Parallel when proven, sequential otherwise** — a group that passed the three detection checks (see [run-parallel.md](run-parallel.md)) runs in parallel without asking; everything not proven independent runs in order, respecting dependencies. `--serial` forces order for the whole run
 - **Stop on failure** — if validation or tests fail, stop and report. Do not continue to next task.
+- **A failure case with no executed test keeps the box open** — when a sub-task's `Tests` field names failure cases ([tasks.md](tasks.md#rules), rule 13), the box closes only when each case has a test that ran; a case written but never run counts as absent, and the run report says which
+- **Reach — nothing leaves the machine unless the requester asked for that exact step**: no upload, push, outside login or message, nothing written or deleted outside the project and its own temporary directory; when the requester cannot reach what was built, tell them how to get it and never move it for them ([lean-route.md](lean-route.md#the-floor--every-program-however-small))
 - **No step skipping** — every step in the Executor protocol is mandatory. Context Gathering is not optional when a Context field exists. Validation commands must be executed and their output reported. This is the fundamental rule of Run Mode.
 - **Run-time questions count against the story's question budget** ([clarify.md](clarify.md#clarify-protocol)). A decision with a default in the constitution's `## Defaults` block or in the [plain register](plain-register.md#decisions-the-requester-is-not-asked) table is taken and mentioned, never asked
-- **For a `layperson` requester** ([plain-register.md](plain-register.md)): run and show — never ask them to run a command; a stop per group is promised only when `--step` was passed — under the Fast default the run goes to the end and shows the result once, and a doubt the defaults do not cover stops it like a failure would — and when it is promised, it is one group per turn; visible text per turn stays under ~1,500 characters, the rest goes to files. **A build turn writes nothing to the chat between tool calls**: the step-by-step is collected as it happens and written into `run-report.md` once at the end of the turn — one `Write`, never an `Edit` per step (Fast already writes that report) — and the turn's only visible text is its closing three lines — what to type, what it does, and one choice that was made for them. **The turn that finishes the run still ends with the next-step question**, after those three lines: a question is not text between tool calls, and the form rule never removes it ([End of Run](#end-of-run--next-step-index)) Notes written between tool calls are where jargon leaks into the chat, and what pushes a build turn over its character ceiling
+- **For a `layperson` requester** ([plain-register.md](plain-register.md)): run and show — never ask them to run a command; a stop per group is promised only when `--step` was passed — under the Fast default the run goes to the end and shows the result once, and a doubt the defaults do not cover stops it like a failure would — and when it is promised, it is one group per turn; visible text per turn stays under ~1,500 characters, the rest goes to files. **A build turn writes nothing to the chat between tool calls**: the step-by-step is collected as it happens and written into `run-report.md` once at the end of the turn — one `Write`, never an `Edit` per step (Fast already writes that report) — and the turn's only visible text is its closing three lines — what to type, what it does, and one choice that was made for them. **The turn that finishes the run still ends with the next-step question**, after those three lines: a question is not text between tool calls, and the form rule never removes it ([End of Run](run-end.md#end-of-run--next-step-index)) Notes written between tool calls are where jargon leaks into the chat, and what pushes a build turn over its character ceiling
 - **User gates** — controlled by execution flags (default: gate after every task group)
 - **Supervisor messages are read at every group gate**: `epico-inbox --story <dir>`. When it prints anything, follow [supervision.md](supervision.md) before the next group — verify each claim, adjust if it reproduces, reply either way. A box close relays them too, through a hook
-- **The context band is read after every task group**, gate or no gate: `epico-telemetry | jq -r '.context.band'` ([Measure the context window first](#measure-the-context-window-first)). `high` and `efficient` go on. **`degraded` stops the run at that group boundary**: the closed boxes stay closed, and the closing recommends a new session with the command to type after `/clear` — `/epico:epico stories NNN run all`, which resumes from the first open box. Under `--auto` too: a degraded context is not a gate `--auto` may answer, since the answers it would give get worse. A `null` band is unknown — go on, and say once that the context was not measured
+- **The context band is read after every task group**, gate or no gate: `epico-telemetry | jq -r '.context.band'` ([Measure the context window first](run-end.md#measure-the-context-window-first)). `high` and `efficient` go on. **`degraded` stops the run at that group boundary**: the closed boxes stay closed, and the closing recommends a new session with the command to type after `/clear` — `/epico:epico stories NNN run all`, which resumes from the first open box. Under `--auto` too: a degraded context is not a gate `--auto` may answer, since the answers it would give get worse. A `null` band is unknown — go on, and say once that the context was not measured
 - **Context is fresh** — each Executor reads files directly. The orchestrator passes only metadata (paths, deviations, discoveries) between tasks.
 - **Commit granularity** — follow the Commit fields defined in tasks. Never commit in the middle of a task group.
 - **Completion** — a story is **complete** when **no `[ ]` remains**: it is **`done`** when every box is `[x]` or terminal `[~]` (`waived:`, `n-a:`, `superseded-by:`), and **`done-except-external`** when the only non-`[x]` boxes are `[~] (deferred: …)`. `done-except-external` is computed at read time, never written to a file. Progress reads `closed/total (+D deferred)`. See [tasks.md](tasks.md#completion)
 - **Marking** — every box this mode closes is closed by `close-subtask.sh`, one invocation per box; the orchestrator never edits a checkbox, and never re-reads tasks.md for a census the call already returned. See Closing a Box
 - **Lifecycle status** — Run mode writes `status: in-progress` when a census finds the field absent or `draft`, or finds an open `[ ]` on a story reading `done` or `validated` (the reopen edge), and `status: done` when a marking leaves no `[ ]` and no deferred `[~]`. **Run mode writes none of it by hand**: the same `close-subtask.sh` invocation that closed the box takes the census, applies the table, stamps every artifact that carries frontmatter — the same value in each, the field added on a legacy story with the state this run observed and never a back-dated one — and reports what it wrote in `status_written`. A failed write is reported and the run continues. See Status Transitions
 - **Quality gates check** — after all tasks complete (or after the last requested task), run through quality gates and report status. Settling a gate box is a marking like any other: it is closed with `close-subtask.sh <story> gate:<text prefix>` and carries its own status transition, since it is usually the marking that closes the story's last box
-- **Next-step question** — a run that ends without a failure closes with one `AskUserQuestion` offering **one** next step — refine when the plan is owed a change, run the rest when boxes are open, validate otherwise — plus *Stop here*; the context `band` that `epico-telemetry` reports decides whether it runs in this session. Archive is never offered here. See [End of Run](#end-of-run--next-step-index)
+- **Next-step question** — a run that ends without a failure closes with one `AskUserQuestion` offering **one** next step — refine when the plan is owed a change, run the rest when boxes are open, validate otherwise — plus *Stop here*; the context `band` that `epico-telemetry` reports decides whether it runs in this session. Archive is never offered here. See [End of Run](run-end.md#end-of-run--next-step-index)
 - **Spike promote offer** — when a run **sets** a `scale: spike` story's `## Verdict` to `promote`, offer to create the follow-up story, pre-filled with the spike's `conclusion:`. It is offered **at that moment, not at end of run**, and so lands ahead of the Archive offer — which is the order that works, since a promote whose follow-up was never created is not archivable yet. **The offer is defined once**, in [list-mode.md](list-mode.md#spike-lifecycle) — its gate, the ask-first rule, what is recorded on acceptance and the repeat after an interrupted run all live there, and Run mode reuses them unchanged. A spike's deliverable is the answer, and `promote` is the answer "this needs a story": the offer is how that answer becomes one, instead of a note nobody acts on
 - **No archive offer** — a run that writes `done` has closed its boxes, not checked its result: the archive is offered only at VALIDATE's pass point ([validate-mode.md](validate-mode.md#archive-offer)), and `archive-story.sh` refuses a story that is not `validated` unless the user passes `--force <reason>`
 - **Index refresh** — regenerate the managed index block at the end of a completed run: `epico-index`. Defined once, in [validate-mode.md](validate-mode.md#index-refresh); a non-zero exit warns and never gates the run
@@ -592,67 +473,7 @@ Two or more pending tasks whose dependencies are all satisfied may run at once, 
 
 ### End of Run — next step, index
 
-A run that ends without a failure finishes with these steps, in this order:
-
-1. **Next-step question** — one `AskUserQuestion`, below. It is the step most easily lost: a story that ran and was never validated or refined is left for someone to remember. Asking in this session, while the run is still in context, is what keeps it from being forgotten
-2. **Index refresh** — last, for the same reason it is last at the pass point: it renders what the steps before it changed. A zero-diff no-op when VALIDATE already refreshed it
-
-A run that stops on a failure makes neither: its FAIL path already asks how to proceed.
-
-**Every closing names what was not verified — the loss annotation.** Success or failure, the closing message carries one `Not verified:` line: what this run did not check and why (no E2E tool, a sub-task closed `[~]`, a test that could not run here, a platform not exercised, a claim nobody re-ran). `Not verified: nothing — every validation, test and gate ran` is a valid line; an absent one is not. For a `layperson` requester it is one plain sentence after the closing lines, in their words — "I did not try it on a phone." A closing that reports only what passed reads as a claim that everything did.
-
-#### Measure the context window first
-
-Validate and refine are whole modes — they re-read the story, spawn agents and write reports — so whether they fit in **this** session depends on how full its context window already is. Measure it, never estimate it:
-
-```
-epico-telemetry | jq '.context'
-```
-
-Read `band`. The script derives the window and the thresholds from the model the transcript records — never pass `--window` from a guess. When the call fails or `band` is `null`, the fill is **unknown**: offer every option as in the `high` band, and say the context was not measured.
-
-| `band` | Haiku (200k) | Sonnet, Opus, Fable (1M) | The next step |
-|---|---|---|---|
-| `high` | ≤ 100k | ≤ 200k | offered in this session — **strongly recommended here** |
-| `efficient` | ≤ 150k | ≤ 400k | offered in this session, its description stating the fill (`used_pct`) |
-| `degraded` | above | above | **not run in this session** — offered as *New session*, which prints the command to type after `/clear`: `/epico:epico stories validate NNN` or `refine NNN`, whichever the step is |
-
-**In the `degraded` band the answers get worse before the window runs out**, and an auto-compaction in the middle of a validation drops what it was checking. The limit holds even when the user asks: explain the fill and give the command instead.
-
-#### Which step — one, decided by the story's state
-
-The question offers **one** next step, never a menu of modes: a menu hands the user a decision the run already has the facts for, and recommending validate beside a pending fix recommends checking work that is known to be unfinished. The first match wins:
-
-1. **Refine** — the plan no longer describes the work: an entry in `.draft/deviations.yaml` carries `follow_up: true` ([Deviation Register](#deviation-register)), or this run closed `Validation fixes — round 1` ([Fix loop bound](validate-mode.md#fix-loop-bound)). The option's description names what is owed, in one line
-2. **Run the rest** — the plan still holds and part of it is unrun: the last close's `census.open > 0`. The step is `/epico:epico stories NNN run all`, and the description names the open tasks. A partial run (`run N`) lands here: its open boxes are planned work, not a plan to change, and refining them would re-plan what is already planned
-3. **Validate** — otherwise: the story is finished and nothing is owed. Its pass point makes the archive offer ([validate-mode.md](validate-mode.md#archive-offer))
-
-**Archive is never this question's step.** A finished run is `done`, and `done` is not `validated`: the archive is offered after a passing validate, and a story absorbed by another reaches it through [supersede](supersede-mode.md#the-archive-offer). `archive-story.sh` enforces the same rule — without `--force <reason>` it refuses anything not `validated`.
-
-#### The question
-
-Two options — three for a `layperson` requester — the step first, its label ending with the recommended marker **in the user's language** (e.g. `(Recomendado)` in a Portuguese conversation — never a literal English `(Recommended)` in another language):
-
-- **The step** — Refine, Run the rest or Validate, run here in the `high` and `efficient` bands; *New session* with its command in the `degraded` band. **A fix round is asked, never chained.** A fix round's Validate names the round and its cost in the description, and nothing revalidates until the user answers ([Fix loop bound](validate-mode.md#fix-loop-bound))
-- **Stop here** — end the run; the closing line prints the step's command so it can be run later
-- **See it running** — `layperson` requester only, and only when the program has a way to run it that the run has not shown yet: run it with sample input and show the output, then ask this question again without this option. For someone who does not program, seeing it work is the natural next step, and without the option they answer in free text and the question is lost
-
-**A `layperson` requester is asked too** — the question comes after the closing three lines, never instead of them, and the three-line form rule does not remove it. Every label and description says what the option does for them, never the mode's name alone ([plain-register.md](plain-register.md)).
-
-**Ask whenever `AskUserQuestion` is callable** — listed among the tools, directly or as a deferred tool to load ([triage.md](triage.md#runtime-dependency-precheck-mandatory-before-standardfull-triage)). That is the only test: a Fast default and a missing Task tool do not make the run's end headless. **`--auto` is the one exception, and it is explicit**: the user asked not to be asked, so the recommended step is taken — started, when it is *Validate* or *Run the rest*; printed as a command, when it is *New session*, a fix round's revalidation or anything after a validation — and logged as an assumption. **Never write the step as prose while the tool is callable** — a recommendation in the closing text is the question lost.
-
-**Only when `AskUserQuestion` is not callable:** do not start the step. End the closing message with the recommendation and its command — the same rule the archive offer applies ([validate-mode.md](validate-mode.md#headless)); a run's end is not a gate to take on the user's behalf.
-
-**One memory write precedes the question, when memory is available and the register is not empty.** Write the deviation register as one page at `epico/deviation/NNN-<slug>.md`: an H1 `# Deviations of story NNN — <title>` and then the register's entries — deviations and discoveries — as they stand in `.draft/deviations.yaml`, with no secret carried over. One page per story at a stable path, so a re-run of the story rewrites it instead of adding a second. An empty register writes nothing; unavailable memory calls nothing ([mcp-integration.md](mcp-integration.md#memory-mcp)).
-
-### Assumptions under `--auto`
-
-Every point where `--auto` answered for the user is an assumption, and every assumption is written down — the user who said "do not ask me" still reads what was decided.
-
-- **What is logged:** each group gate passed, each doubt resolved (from the constitution, or from the recommended option when it covers nothing), and the end-of-run step taken. One line each: the point, the option taken, the alternatives, and why — `constitution: ## Defaults` or `recommended`.
-- **Where:** `.draft/run-report.md` under `## Assumptions`, in the order they were made; and, when memory is available, the same list as the page `epico/decision/<NNN>-auto-assumptions.md` (H1 `# --auto assumptions of story NNN`), rewritten at that stable path by a later `--auto` run of the story.
-- **What it is not:** a question. Nothing in this list waits for an answer; the closing message names how many assumptions were made and where they are.
-- **What still stops the run:** a validation or test failure, the three-failure breaker, a refused close (`epico-test-diff`), and a step that would leave the machine (push, merge, publish).
+A run that ends without a failure finishes with the next-step question and the index refresh. **Read [run-end.md](run-end.md#end-of-run--next-step-index) before the closing message** — the step order, the loss annotation, the context band, which step to offer and the question's shape live there, and so do the [Assumptions under `--auto`](run-end.md#assumptions-under---auto).
 
 ## Progress Tracking
 

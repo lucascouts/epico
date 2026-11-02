@@ -72,11 +72,12 @@ hasF() { # hasF <label> <block> <fixed string>
   for m in "1×" "2–3×" "4–6×" "8×+"; do hasF "E1 multiple" "$levels" "$m"; done
   hasF "E1 5× rule" "$levels" "5×"
   read_=$(section "$f" '^## How the level is read' '^## ')
-  has "E1 asked when unsettled" "$read_" "does not settle it"
-  has "E1 tool fallback" "$read_" "only when nobody can answer"
-  has "E1 price line" "$read_" "one line"
-  has "E1 orientation" "$read_" "orientation"
-  has "E1 never a choice of level" "$read_" "which level is this"
+  # 2026-10-30 SDD battery: the asked level picked the route by chance (7/7).
+  has "E1 inferred" "$read_" "never asked"
+  has "E1 unsettled" "$read_" "does not settle it"
+  has "E1 tool fallback" "$read_" "\`tool\` unless the context points elsewhere"
+  has "E1 price line" "$read_" "proposal line"
+  has "E1 whole context" "$read_" "never from one word"
   rec=$(section "$f" '^## Where it is recorded' '^## ')
   has "E1 frontmatter" "$rec" "engineering:"
   has "E1 meta" "$rec" "meta.yaml"
@@ -97,14 +98,14 @@ hasF() { # hasF <label> <block> <fixed string>
   has "E1 never the scale" "$never" "scale"
 }
 
-@test "E2: triage reads the engineering level from the request, asks when unsettled (tool only when nobody can answer), and the proposal carries an Engineering line" {
+@test "E2: triage infers the engineering level from the request, never asks (tool when unsettled), and the proposal carries an Engineering line" {
   block=$(section "$ROOT/references/triage.md" '^## Triage Protocol' '^### Mode Recommendation')
   [ -n "$block" ]
   has "E2 level" "$block" "engineering level"
   has "E2 reference" "$block" "engineering-level"
   for l in experiment tool project product; do has "E2 $l" "$block" "\`$l\`"; done
-  has "E2 default" "$block" "ask when the request does not settle it"
-  has "E2 fallback" "$block" "only when nobody can answer"
+  has "E2 inferred" "$block" "inferred from the whole request, never asked"
+  has "E2 fallback" "$block" "\`tool\` unless the context points elsewhere"
   has "E2 price" "$block" "multiple"
   has "E2 never the scale" "$block" "never changes the scale and never changes the requester level"
   grep -q '^> - \*\*Engineering:\*\*' "$ROOT/references/triage.md"
@@ -352,12 +353,10 @@ hasF() { # hasF <label> <block> <fixed string>
   has "E15c fail-open" "$(cat "$v")" "ABSENCE IS SILENT"
 }
 
-@test "E16: a level question carries no recommended option, in any register" {
+@test "E16: no level question is asked, in any register, so none carries a recommended option" {
   read_=$(section "$ROOT/references/engineering-level.md" '^## How the level is read' '^## ')
-  has "E16 rule" "$read_" "ever marked recommended"
-  has "E16 both registers" "$read_" "any register"
-  # Every register uses the same unmarked form, changing only vocabulary.
-  has "E16 direction" "$read_" "Every register asks it as its own question"
+  has "E16 rule" "$read_" "no level question is ever asked, in any register"
+  has "E16 unmarked" "$read_" "none is marked recommended"
 }
 
 @test "E17: no dependencies is a verdict, not a failure" {

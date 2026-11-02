@@ -38,10 +38,10 @@ has() {  # <file> <extended regex> — case-insensitive, names the miss
 }
 
 @test "A3: --auto asks only on failure and logs every assumption, in the run report and in memory" {
-  has references/run-mode.md '### assumptions under `--auto`'
-  has references/run-mode.md '## assumptions'
-  has references/run-mode.md 'epico/decision/<nnn>-auto-assumptions'
-  has references/run-mode.md '`--auto` is the one exception'
+  has references/run-end.md '## assumptions under `--auto`'
+  has references/run-end.md '## assumptions'
+  has references/run-end.md 'epico/decision/<nnn>-auto-assumptions'
+  has references/run-end.md '`--auto` is the one exception'
   has references/mcp-integration.md 'auto-assumptions'
   has skills/epico/SKILL.md '`--auto` takes the recommended step'
 }
@@ -50,8 +50,8 @@ has() {  # <file> <extended regex> — case-insensitive, names the miss
   has agents/auditor.md 'not_verified'
   has agents/auditor.md 'never empty by omission'
   has references/validate-mode.md 'always its `not_verified\[\]`'
-  has references/run-mode.md 'the loss annotation'
-  has references/run-mode.md 'not verified:'
+  has references/run-end.md 'the loss annotation'
+  has references/run-end.md 'not verified:'
   has references/bugfix.md "reporter's diagnosis"
   has references/bugfix.md 'proposed fix'
   has references/triage.md 'split the report into four'

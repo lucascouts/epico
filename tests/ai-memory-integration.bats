@@ -78,7 +78,7 @@ has() { # has <label> <block> <keyword>
 @test "M5: run-mode.md recalls in the procedure and writes the deviations page at End of Run" {
   proc=$(section "$ROOT/references/run-mode.md" '^## Procedure' '^## ')
   has "M5 recall" "$proc" "memory_query"
-  end=$(section "$ROOT/references/run-mode.md" '^### End of Run' '^## ')
+  end=$(section "$ROOT/references/run-end.md" '^## End of Run' '^## ')
   has "M5 page" "$end" "epico/deviation/"
 }
 

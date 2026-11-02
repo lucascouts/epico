@@ -90,3 +90,22 @@ setup() {
   [ "$status" -eq 0 ]
   echo "$output" | jq -e '.pass == true'
 }
+
+@test "--max-chars fails a closing longer than the ceiling and reports its length" {
+  # 2026-10-30 battery: "mto texto" in 13/14 runs; the closing ceiling is ~600.
+  long=$(printf 'Pronto, a sua Pokédex já funciona e guarda tudo. %.0s' $(seq 1 15))
+  run bash -c "printf '%s\n' '$long' | bash '$CHECK' --max-chars 600"
+  [ "$status" -eq 1 ]
+  echo "$output" | jq -e '.pass == false and .hits == [] and .chars > 600 and .max_chars == 600'
+}
+
+@test "--max-chars passes a short closing and counts characters, not bytes" {
+  run bash -c "printf 'Pronto! Digite \`npm start\` para abrir. Não testei no celular.\n' | bash '$CHECK' --max-chars 61"
+  [ "$status" -eq 0 ]
+  echo "$output" | jq -e '.pass == true and .chars == 61'
+}
+
+@test "--max-chars without a positive number is bad usage" {
+  run bash -c "printf 'oi\n' | bash '$CHECK' --max-chars abc"
+  [ "$status" -eq 2 ]
+}

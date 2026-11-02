@@ -8,24 +8,34 @@
 # optionally behind `>` or a list marker). The legend line itself is not
 # scanned. What reaches a beginner unexplained is the defect, not the word.
 #
-# Output: one JSON object {pass, hits: [{term, count}], explained: [term]}.
-# Exit 0 when every term found has a legend, 1 when one does not, 2 on bad
-# usage. The orchestrator rewrites the closing — plain words, or a legend under
+# --max-chars N also fails a text longer than N characters (code points, the
+# code spans included: the requester reads them too). A layperson closing is
+# checked with 600 — "mto texto" was the complaint in 13/14 runs of the
+# 2026-10-30 SDD battery.
+#
+# Output: one JSON object {pass, hits: [{term, count}], explained: [term],
+# chars, max_chars}. Exit 0 when every term found has a legend and the text
+# fits, 1 when a term has none or the text is too long, 2 on bad usage. The orchestrator rewrites the closing — plain words, or a legend under
 # the term — and runs this again until it exits 0.
 
 set -euo pipefail
 
-usage() { echo "Usage: jargon-check.sh [--file <path>] [--terms <path>]   (text on stdin when no --file)"; }
+usage() { echo "Usage: jargon-check.sh [--file <path>] [--terms <path>] [--max-chars <n>]   (text on stdin when no --file)"; }
 
-FILE="" TERMS="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/assets/jargon-terms.txt"
+FILE="" MAX_CHARS="" TERMS="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)/assets/jargon-terms.txt"
 while [ $# -gt 0 ]; do
   case "$1" in
     --file) FILE="${2-}"; shift 2 ;;
     --terms) TERMS="${2-}"; shift 2 ;;
+    --max-chars) MAX_CHARS="${2-}"; shift 2 ;;
     -h | --help) usage; exit 0 ;;
     *) echo "jargon-check.sh: unknown argument: $1" >&2; usage >&2; exit 2 ;;
   esac
 done
+case "$MAX_CHARS" in
+  '') ;;
+  *[!0-9]* | 0) echo "jargon-check.sh: --max-chars needs a positive number: $MAX_CHARS" >&2; usage >&2; exit 2 ;;
+esac
 [ -r "$TERMS" ] || { echo "jargon-check.sh: term list not readable: $TERMS" >&2; exit 2; }
 if [ -n "$FILE" ]; then
   [ -r "$FILE" ] || { echo "jargon-check.sh: not readable: $FILE" >&2; exit 2; }
@@ -81,10 +91,20 @@ if [ ${#SEEN_EXPLAINED[@]} -gt 0 ]; then
   EXPL_JSON=${EXPL_JSON%, }
 fi
 
-if [ ${#HITS[@]} -eq 0 ]; then
-  printf '{"pass": true, "hits": [], "explained": [%s]}\n' "$EXPL_JSON"
+# Code points, not bytes: jq counts the same under any locale, and an accented
+# Portuguese closing would otherwise read longer than it is.
+CHARS=$(printf '%s' "$TEXT" | jq -Rs 'length')
+FITS=true
+[ -n "$MAX_CHARS" ] && [ "$CHARS" -gt "$MAX_CHARS" ] && FITS=false
+SIZE_JSON="\"chars\": $CHARS, \"max_chars\": ${MAX_CHARS:-null}"
+
+joined=""
+if [ ${#HITS[@]} -gt 0 ]; then
+  joined=$(printf '%s, ' "${HITS[@]}"); joined=${joined%, }
+fi
+if [ ${#HITS[@]} -eq 0 ] && [ "$FITS" = true ]; then
+  printf '{"pass": true, "hits": [], "explained": [%s], %s}\n' "$EXPL_JSON" "$SIZE_JSON"
   exit 0
 fi
-joined=$(printf '%s, ' "${HITS[@]}"); joined=${joined%, }
-printf '{"pass": false, "hits": [%s], "explained": [%s]}\n' "$joined" "$EXPL_JSON"
+printf '{"pass": false, "hits": [%s], "explained": [%s], %s}\n' "$joined" "$EXPL_JSON" "$SIZE_JSON"
 exit 1

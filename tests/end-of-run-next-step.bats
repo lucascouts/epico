@@ -1,5 +1,5 @@
 #!/usr/bin/env bats
-# references/run-mode.md, "End of Run" — the next-step question.
+# references/run-end.md, "End of Run" — the next-step question.
 #
 # A finished run asks ONE AskUserQuestion offering ONE next step, decided by
 # the story's state, and gates it on the measured context fill:
@@ -24,7 +24,7 @@
 
 setup() {
   ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
-  END=$(awk '/^### End of Run/ {f=1; print; next} f && /^## / {exit} f {print}' "$ROOT/references/run-mode.md")
+  END=$(awk '/^## End of Run/ {f=1; print; next} f && /^## / {exit} f {print}' "$ROOT/references/run-end.md")
   [ -n "$END" ]
 }
 
@@ -40,7 +40,7 @@ setup() {
 @test "N2: the context fill is read from epico-telemetry's band, never a guessed window" {
   [[ "$END" == *"epico-telemetry | jq '.context'"* ]]
   [[ "$END" == *'Read `band`'* ]]
-  run grep -q 'epico-telemetry --window' "$ROOT/references/run-mode.md"
+  run grep -q 'epico-telemetry --window' "$ROOT/references/run-mode.md" "$ROOT/references/run-end.md"
   [ "$status" -eq 1 ]
 }
 

@@ -297,6 +297,8 @@ The five gates in the template are fixed. After them, the section carries **one 
 
 12. **Quality coverage.** Every line of the story's `## Quality Requirements` legend ([quality-catalog.md](quality-catalog.md)) is cited by at least one sub-task's `Quality:` field, and the Quality Gates section carries one generated box per line (see Generated Quality Gates). `cross-reference.sh` reports an uncited line as a quality orphan and a cited-but-undeclared identifier as a phantom, and exits 1 on either.
 
+13. **Failure cases, one test each.** A sub-task whose `Tests` field covers a rule about bad input, end of input, a data file or a floor case names those cases in the field — one test per failure case, never one test for "the errors". The cases are what a run forgets first, and a named case is one the close can count.
+
 ## Sequencing Guidelines
 
 - Order tasks so each one builds on the previous

@@ -191,7 +191,7 @@ A **fix round** is one pass of the loop validate fails → fix tasks are created
 - **The round is counted from tasks.md, never remembered.** The group step 6 creates is titled `Validation fixes — round N`; the next round is one more than the highest `N` already in the file.
 - **Every offer states what a round costs**: the fix run plus one Auditor spawn, which validates and audits. When `epico-telemetry` measured this validation, give its `subagent` tokens and its wall clock as the price of the revalidation.
 - **Round 1** — offered as step 6 always offered it.
-- **After a fix round runs, the revalidation is asked, never chained.** Neither Run mode nor this mode starts VALIDATE on its own after a `Validation fixes` group closes; the next-step question at the end of that run offers it, stating the round and its cost ([run-mode.md](run-mode.md#end-of-run--next-step-index)).
+- **After a fix round runs, the revalidation is asked, never chained.** Neither Run mode nor this mode starts VALIDATE on its own after a `Validation fixes` group closes; the next-step question at the end of that run offers it, stating the round and its cost ([run-end.md](run-end.md#end-of-run--next-step-index)).
 - **The revalidation re-checks the failures, never the whole story.** Run `epico-validate-run --story <dir> --only <id,id,gate:<prefix>>` with the entries that failed: every other entry keeps its earlier result. Spawn the Auditor again only when a failed entry was `JUDGE` or the audit reported gaps — and then scoped, its prompt naming those entries and gaps as the whole of its work. A failure the script alone settled needs no sub-agent.
 - **Round 1 is the only one offered.** When the revalidation still fails, step 6 creates no round 2: present what remains and recommend refining the story, since a finding that survives a fix is usually a plan problem, not an implementation one. Another round runs only when the user asks for it in so many words.
 - **Headless** takes the recommended option at each point — so it runs round 1 at most, never revalidates on its own, and logs the command instead.
@@ -232,7 +232,7 @@ A failed run **writes no status and makes no offer** — rule 3 below, reached a
 
 Validate mode owns exactly one of the six `status:` values — `validated` — and writes it at exactly one point: a passing verdict. It never writes any of the other five; those belong to CREATE, RUN, the supersede operation and the archive operation. See [lifecycle-status.md](lifecycle-status.md#lifecycle-status-status) for the full field spec.
 
-**The write mechanism is defined once**, in [run-mode.md](run-mode.md#status-transitions) — `Edit` on the frontmatter line and never `Write`, the same value in every artifact that carries frontmatter, the `Edit` adding the field on a legacy story that never had one. Validate mode reuses it unchanged; restating it here is exactly how the two copies would drift apart. A failed write is reported and the flow continues: `status:` is advisory metadata and must never change, delay or block the verdict it is recording.
+**The write mechanism is defined once**, in [run-status.md](run-status.md#status-transitions) — `Edit` on the frontmatter line and never `Write`, the same value in every artifact that carries frontmatter, the `Edit` adding the field on a legacy story that never had one. Validate mode reuses it unchanged; restating it here is exactly how the two copies would drift apart. A failed write is reported and the flow continues: `status:` is advisory metadata and must never change, delay or block the verdict it is recording.
 
 **The verdict read here is the files'.** Rules 1-3 turn on the `verdict` field of `.draft/validation-report.yaml` and `.draft/audit-report.yaml` — never on what an agent said in chat, and never on a re-derivation from their arrays (see The verdict is the file, above). Apply the first rule that matches:
 
@@ -248,7 +248,7 @@ Validate mode owns exactly one of the six `status:` values — `validated` — a
 
 **Rule 3 — a failing verdict writes nothing at all.** Not `in-progress`, and not a rollback of a `validated` left by an earlier pass. A failure is a report, not a lifecycle transition; the story keeps whatever state its last real transition recorded. A run failed for want of a readable report lands here too: an unknown verdict is not a passing one.
 
-**`in-progress → validated`, skipping `done`.** A story whose only non-`[x]` boxes are `[~] (deferred: …)` never receives `done`: Run mode writes `done` only when no `[ ]` **and** no deferred `[~]` remains, so such a story stays `in-progress` (see [run-mode.md](run-mode.md#status-transitions)). Nothing blocks it from being validated. Rule 1 asks for no `[ ]`, and a deferred box is closed, not open — the same reading `validate-story.sh` applies, whose ahead-of-checkboxes check counts `[ ]` only, so `validated` on a `done-except-external` story raises no warning. Such a story therefore runs `in-progress → validated`, skipping `done` entirely.
+**`in-progress → validated`, skipping `done`.** A story whose only non-`[x]` boxes are `[~] (deferred: …)` never receives `done`: Run mode writes `done` only when no `[ ]` **and** no deferred `[~]` remains, so such a story stays `in-progress` (see [run-status.md](run-status.md#status-transitions)). Nothing blocks it from being validated. Rule 1 asks for no `[ ]`, and a deferred box is closed, not open — the same reading `validate-story.sh` applies, whose ahead-of-checkboxes check counts `[ ]` only, so `validated` on a `done-except-external` story raises no warning. Such a story therefore runs `in-progress → validated`, skipping `done` entirely.
 
 **The edge follows from two rules**: `done` is withheld while a deferred box remains, and `validated` is granted on a passing verdict. It is written down here rather than left implicit because an undocumented edge in a state machine is how the next maintainer gets it wrong.
 
@@ -335,7 +335,7 @@ printf '%s\n' "$status_json" | epico-integration --validate <NNN>
 
 ## Archive Offer
 
-Step 3 of the pass point, and **the single definition of the offer**. Run mode never makes it — a run ends at `done`, and its next step is this mode ([run-mode.md](run-mode.md#end-of-run--next-step-index)); [supersede](supersede-mode.md#the-archive-offer) reuses this section for a story absorbed by another. A second copy of a prompt that spends guards is how one of the copies ends up spending them differently.
+Step 3 of the pass point, and **the single definition of the offer**. Run mode never makes it — a run ends at `done`, and its next step is this mode ([run-end.md](run-end.md#end-of-run--next-step-index)); [supersede](supersede-mode.md#the-archive-offer) reuses this section for a story absorbed by another. A second copy of a prompt that spends guards is how one of the copies ends up spending them differently.
 
 **Why here.** Archiving is the step most easily skipped, and right after a passing validate is when it is most likely to be done. Offering it anywhere else asks the user to remember; offering it here asks them to confirm.
 

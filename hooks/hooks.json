@@ -1,5 +1,5 @@
 {
-  "description": "Epico guards: archive is read-only, the Executor never commits or edits tasks.md, commits keep the identity git already has; validation after a write under .epico/; state restore after compaction; orphan-draft notice after /clear; a pre-Epico .epic/ moved to .epico/ and a one-line epico-doctor summary at session start; supervisor messages relayed as untrusted claims after each close; report guard on the Auditor.",
+  "description": "Epico guards: archive is read-only, the Executor never commits or edits tasks.md, commits keep the identity git already has; validation after a write under .epico/; state restore after compaction; orphan-draft notice after /clear; a pre-Epico .epic/ moved to .epico/ and a one-line epico-doctor summary at session start; supervisor messages relayed as untrusted claims after each close; report guard on the Auditor; an English sentence in a conversation held in another language asks for a rewrite at the end of the turn.",
   "hooks": {
     "PostToolUse": [
       {
@@ -129,6 +129,10 @@
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/hook-legend-guard.sh\""
+          },
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/scripts/hook-language-guard.sh\""
           }
         ]
       }

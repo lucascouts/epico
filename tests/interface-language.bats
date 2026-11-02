@@ -6,8 +6,9 @@
 #
 #   L1  the Language section names what the requester's own users read, and
 #       puts it outside the English rule
-#   L2  the interface language is asked in the requester's language, with the
-#       three options, and skipped when the request is already English
+#   L2  the interface language is inferred from the request; asked in the
+#       requester's language, with the three options, only when it is in
+#       doubt, and never when the request is already English
 #   L3  a run with no question round defaults to the request's language
 #   L4  instant states the default on its line instead of inheriting English
 #   L5  the artifacts stay English — only the interface falls outside the rule
@@ -34,9 +35,10 @@ has() {
   has "L1 boundary" "$lang" "does not cover"
 }
 
-@test "L2: the interface language is asked in the requester's own language, three options" {
+@test "L2: the interface language is inferred; asked in the requester's own language only when in doubt" {
   lang=$(section "$SKILL" '^## Language' '^## ')
-  has "L2 asked" "$lang" "asked, not assumed"
+  has "L2 inferred" "$lang" "inferred, not asked"
+  has "L2 doubt" "$lang" "only when it is in doubt"
   has "L2 own language" "$lang" "requester's own language"
   has "L2 english option" "$lang" "English"
   has "L2 skip" "$lang" "not asked when the request is already in English"

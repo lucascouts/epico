@@ -203,7 +203,7 @@ The nine cross-artifact checks and the output format live in [reviewer.md](../ag
 - in this session: type `/model <run-model>`, then `/epico:epico stories run NNN` — `/model <name>` also makes it the default for new sessions; for this session only, open `/model`, pick it and press `s`
 - in a new one: `claude --model <run-model>`, then `/epico:epico stories run NNN` — applies to that session alone, and is the cheaper of the two: it starts with an empty context, and the story's files already carry everything the run needs
 
-Neither is run on the user's behalf: a plugin cannot switch the session's model, so the closing gives the commands and stops. For a `layperson` the same two lines are given in their words, with `/model` and the model name legended.
+Neither is run on the user's behalf: a plugin cannot switch the session's model, so the closing gives the commands and stops. **A `layperson` gets no command** — no `/model`, no `/epico:epico stories run NNN`: their story carries no `run-model:` ([clarify.md](clarify.md#the-run-model-standard-and-full)), and the closing's one-line gate offers to build it now, in this session. A command to type is a step a beginner may not know how to take.
 
 ## Traceability Check
 
