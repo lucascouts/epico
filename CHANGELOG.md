@@ -10,6 +10,12 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.27.1] — 2026-11-03
+
+The converge pass and the final review run silently.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
 ### Fixed
 
 - **The converge pass and the final review are never announced**, and the reviewer's English report never reaches the chat. Around these steps English narration had reached a beginner in four of seven instant runs.
@@ -1830,7 +1836,8 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.27.0...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.27.1...HEAD
+[0.27.1]: https://github.com/lucascouts/epico/compare/v0.27.0...v0.27.1
 [0.27.0]: https://github.com/lucascouts/epico/compare/v0.26.1...v0.27.0
 [0.26.1]: https://github.com/lucascouts/epico/compare/v0.26.0...v0.26.1
 [0.26.0]: https://github.com/lucascouts/epico/compare/v0.25.1...v0.26.0
