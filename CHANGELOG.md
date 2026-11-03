@@ -10,6 +10,16 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Added
+
+- **`final-reviewer` agent**: for a beginner, the lean route's converge pass is a fresh reviewer's. It reads code it did not write, reports each gap with the command that reproduces it, and never edits; only a finding the main agent reproduces is fixed.
+
+### Changed
+
+- **Host hygiene**: every process a run started is stopped before the closing unless the requester asked to keep it, and nothing opens on the requester's desktop unasked.
+- **A beginner's routine round becomes numbered assumptions** confirmed at once — one question instead of three or more.
+- `PURPOSE.md` points only to commands every Claude Code has: the `/gsd-*` and `/tab` suggestions are gone.
+
 ## [0.26.1] — 2026-11-02
 
 A beginner's closing on the lean route is three lines; the language hook is gone.

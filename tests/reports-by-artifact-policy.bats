@@ -1062,10 +1062,12 @@ test-advisor"
   [ "$(agents_granting Write)" = "$expected" ]
 }
 
-@test "Bash is granted to exactly auditor, executor, tech-reviewer and test-advisor" {
-  # Bash is held by exactly these five agents; nobody else joins.
+@test "Bash is granted to exactly auditor, executor, final-reviewer, tech-reviewer and test-advisor" {
+  # Bash is held by exactly these agents; nobody else joins. The final reviewer
+  # needs it to reproduce each finding in its own temporary copy.
   expected="auditor
 executor
+final-reviewer
 tech-reviewer
 test-advisor"
   [ "$(agents_granting Bash)" = "$expected" ]

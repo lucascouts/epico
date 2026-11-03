@@ -72,7 +72,9 @@ has() {  # <file> <extended regex> — case-insensitive, names the miss
   has skills/epico/SKILL.md '\$\{CLAUDE_PLUGIN_ROOT\}/references/'
   has skills/epico/SKILL.md 'triage.md#constitution-gate'
   command jq -e '.userConfig.defaultScale.options == ["fast","standard","full","spike"] and .userConfig.aiMemory.options == ["auto","off"]' "$ROOT/.claude-plugin/plugin.json"
-  has README.md '6 sub-agents'
+  # The count is derived, so a new agent fails here until the README names it.
+  n=$(find "$ROOT/agents" -maxdepth 1 -name '*.md' | wc -l | tr -d ' ')
+  has README.md "$n sub-agents"
   has README.md '4 hook events'
   has README.md 'no output style changes how they respond'
   has .github/workflows/shell.yml 'claude plugin validate --strict'
