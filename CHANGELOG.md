@@ -10,11 +10,15 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.26.1] — 2026-11-02
+
 A beginner's closing on the lean route is three lines; the language hook is gone.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
 
 ### Changed
 
-- **A beginner's closing on the lean route is three lines** — what to type, what it does, and the one decision that reduced protection most — then the `Not verified:` sentence; the rest goes to the README. With 0.26.0 the longest closing still ran 520–1,060 characters.
+- **A beginner's closing on the lean route is three lines** — what to type, what it does, and the one decision that reduced protection most — then the `Not verified:` sentence; the rest goes to the README. On the beginner retest the longest closing fell from 1,060 to 677 characters.
 
 ### Removed
 
@@ -1806,7 +1810,8 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.26.0...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.26.1...HEAD
+[0.26.1]: https://github.com/lucascouts/epico/compare/v0.26.0...v0.26.1
 [0.26.0]: https://github.com/lucascouts/epico/compare/v0.25.1...v0.26.0
 [0.25.1]: https://github.com/lucascouts/epico/compare/v0.25.0...v0.25.1
 [0.25.0]: https://github.com/lucascouts/epico/compare/v0.24.0...v0.25.0
