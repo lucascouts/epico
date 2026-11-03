@@ -10,7 +10,11 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
-The 2026-10-30 SDD battery's P1 verdict: inferences replace three questions, every run ends with a converge pass, and a beginner's closing has a ceiling.
+## [0.26.0] — 2026-11-02
+
+The 2026-10-30 SDD battery's P1 verdict: inferences replace three questions, every run ends with a converge pass, a beginner's closing has a ceiling, and nothing leaves the machine unasked.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
 
 ### Added
 
@@ -1792,7 +1796,8 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.25.1...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.26.0...HEAD
+[0.26.0]: https://github.com/lucascouts/epico/compare/v0.25.1...v0.26.0
 [0.25.1]: https://github.com/lucascouts/epico/compare/v0.25.0...v0.25.1
 [0.25.0]: https://github.com/lucascouts/epico/compare/v0.24.0...v0.25.0
 [0.24.0]: https://github.com/lucascouts/epico/compare/v0.23.1...v0.24.0
