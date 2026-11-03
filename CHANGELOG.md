@@ -10,9 +10,15 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.27.0] — 2026-11-03
+
+A fresh reviewer checks a beginner's work before the closing; runs clean up after themselves; routine questions become one list.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
 ### Added
 
-- **`final-reviewer` agent**: for a beginner, the lean route's converge pass is a fresh reviewer's. It reads code it did not write, reports each gap with the command that reproduces it, and never edits; only a finding the main agent reproduces is fixed.
+- **`final-reviewer` agent**: for a beginner, the lean route's converge pass is a fresh reviewer's. It runs after the commit, reads code it did not write, reports at most three gaps a beginner would hit — each with the command that reproduces it — and never edits; only a finding the main agent reproduces is fixed.
 
 ### Changed
 
@@ -1820,7 +1826,8 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.26.1...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.27.0...HEAD
+[0.27.0]: https://github.com/lucascouts/epico/compare/v0.26.1...v0.27.0
 [0.26.1]: https://github.com/lucascouts/epico/compare/v0.26.0...v0.26.1
 [0.26.0]: https://github.com/lucascouts/epico/compare/v0.25.1...v0.26.0
 [0.25.1]: https://github.com/lucascouts/epico/compare/v0.25.0...v0.25.1
