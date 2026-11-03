@@ -27,6 +27,12 @@
 #   P10 nothing leaves the machine unless the requester asked for that step
 #       (2026-11-02 check: a run uploaded a 14-year-old's project to a public
 #       file host after a yes/no question)
+#   P11 the lean route's layperson closing is three lines, the rest in the
+#       README (2026-11-02 check: closings still 520–1,060 characters)
+#   P12 no Stop hook rewrites English narration: it fires after the sentence
+#       was shown, so it cannot prevent the leak and its rewrite lengthens the
+#       closing (2026-11-02 check: it fired and rewrote; the leak fell to 1/7
+#       runs once the lean route came back, with fewer turns to narrate in)
 
 ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
 REFS="$ROOT/references"
@@ -103,4 +109,15 @@ lacks() { # lacks <file> <fixed text>
   has "$REFS/run-mode.md" 'nothing leaves the machine'
   has "$REFS/lean-route.md" 'file host'
   has "$REFS/lean-route.md" 'never move it for them'
+}
+
+@test "P11: the lean route's layperson closing is three lines, the rest in the README" {
+  has "$REFS/lean-route.md" 'a `layperson` closing is three lines'
+  has "$REFS/lean-route.md" 'everything else goes to the README'
+}
+
+@test "P12: no Stop hook rewrites English narration" {
+  [ ! -e "$ROOT/scripts/hook-language-guard.sh" ]
+  run jq -e '[.hooks[][].hooks[].command] | any(contains("hook-language-guard"))' "$ROOT/hooks/hooks.json"
+  [ "$status" -ne 0 ]
 }

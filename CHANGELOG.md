@@ -10,6 +10,16 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+A beginner's closing on the lean route is three lines; the language hook is gone.
+
+### Changed
+
+- **A beginner's closing on the lean route is three lines** — what to type, what it does, and the one decision that reduced protection most — then the `Not verified:` sentence; the rest goes to the README. With 0.26.0 the longest closing still ran 520–1,060 characters.
+
+### Removed
+
+- **`hook-language-guard.sh`.** It fires when the turn ends, after the English sentence was shown, so it cannot prevent the leak, and its rewrite made the closing longer. With the lean route back for beginners the leak fell to one run in seven without help from it.
+
 ## [0.26.0] — 2026-11-02
 
 The 2026-10-30 SDD battery's P1 verdict: inferences replace three questions, every run ends with a converge pass, a beginner's closing has a ceiling, and nothing leaves the machine unasked.
