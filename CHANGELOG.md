@@ -10,6 +10,10 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Fixed
+
+- **The converge pass and the final review are never announced**, and the reviewer's English report never reaches the chat. Around these steps English narration had reached a beginner in four of seven instant runs.
+
 ## [0.27.0] — 2026-11-03
 
 A fresh reviewer checks a beginner's work before the closing; runs clean up after themselves; routine questions become one list.

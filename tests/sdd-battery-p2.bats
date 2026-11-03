@@ -17,6 +17,10 @@
 #       breaks the request or the floor through use the requester would make, at
 #       most three findings (the 2026-11-03 check also reported ids above 2^53,
 #       64 KB lines and non-UTF-8 terminals)
+#   Q5  the converge pass and the review are never announced, and the
+#       reviewer's English report never reaches the chat (2026-11-03 check:
+#       "Now a fresh review of the finished work.", "Reproduced. I'll make…" in
+#       4/7 instant runs, communication 12.6 → 11.1)
 #   Q4  a layperson round of three or more questions whose recommended options
 #       they would take becomes numbered assumptions confirmed at once (BMAD:
 #       "yes to all 5" replaced five questions)
@@ -58,4 +62,10 @@ ROOT="$(cd "$BATS_TEST_DIRNAME/.." && pwd)"
   grep -qiF 'numbered assumptions' "$f"
   grep -qiF 'confirmed at once' "$f"
   grep -qiF 'change number' "$f"
+}
+
+@test "Q5: the converge pass and the review are never announced; the reviewer's report stays out of the chat" {
+  f="$ROOT/references/lean-route.md"
+  grep -qiF 'neither the converge pass nor the review is announced' "$f"
+  grep -qiF "the reviewer's report never reaches the chat" "$f"
 }
