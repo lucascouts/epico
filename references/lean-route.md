@@ -38,7 +38,9 @@ The [security floor](quality-catalog.md#the-security-floor--five-items-no-level-
 
 ## The closing
 
-**For a `layperson`, the closing stays under ~600 characters**, checked with `epico-jargon --max-chars 600` before it is sent ([plain-register.md](plain-register.md#ceiling-per-turn)): at most two decisions taken alone, and the rest in the README.
+**A `layperson` closing is three lines** — what to type to use it, what it does, and the one decision taken alone that reduced protection most — then the `Not verified:` sentence; **everything else goes to the README**, under a heading in their language that names what was decided for them. The closing stays under ~600 characters, checked with `epico-jargon --max-chars 600` before it is sent ([plain-register.md](plain-register.md#ceiling-per-turn)); a beginner skims a long closing, and the line that mattered is lost in it.
+
+For a `developer`:
 
 - How to run the program and how to run the check, in a line or two.
 - **Every decision taken alone that reduces protection or documentation**, one line each with what keeping it would have cost — the requester finds out by reading, never by being bitten. A choice between equivalent means is not listed.
