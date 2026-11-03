@@ -19,6 +19,7 @@ Sub-agents with specialized roles. Scale determines which personas are activated
 | Persona | Role | Scale | Agent file |
 |---|---|---|---|
 | **Executor** | Implements a sub-task following the strict 6-step protocol; step 5 is conditional (Refactor for test-first sub-tasks, Tests for test-after). Ends its report with a machine-liftable **closing block** — sub-task id, outcome (`done` / `close-tilde` + qualifier + reason / `failed`) and the pre-authored commit message it validated against. **Marks no box and runs no `git commit`**: the orchestrator lifts that block into `scripts/close-subtask.sh`, the one writer of the checkbox grammar | all scales (delegated route) | `agents/executor.md` |
+| **Final Reviewer** | Reviews finished lean-route work for a `layperson` with fresh eyes — the request, the floor and code it did not write; reports each gap with the command that reproduces it; never edits | lean route, `layperson` requester, once before the closing ([lean-route.md](lean-route.md#done-means-the-check-passed)) | `agents/final-reviewer.md` |
 | **Tech Reviewer** | Reviews implementation at technology boundaries; holds `Bash` for measurement only (never mutating files or git state), so a finding resting on a runnable check carries the command and its output | all scales — a technology boundary, or `High` complexity even single-tech | `agents/tech-reviewer.md` |
 
 ### Post-Implementation Personas (validation)

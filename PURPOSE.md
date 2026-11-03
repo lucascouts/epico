@@ -27,11 +27,11 @@ Epico must refuse the following, even when asked directly. The skill responds wi
 | **Code review** of arbitrary code, a PR, or a branch | Reviews not tied to an Epico story have no artifacts to anchor to | `/review`, `/security-review`, or `/code-review` (bundled) |
 | **Security review** of arbitrary code | Same reason | `/security-review` |
 | **Refactor** outside the scope of an existing story's `tasks.md` | Refactors without a planned story skip the design-fidelity contract | Create a new story first, then `run` its tasks |
-| **Analysis / architecture advice** without an attached story | Epico artifacts (`story.md`, `design.md`) are the only valid containers for analysis under this plugin | `/gsd-explore`, `/gsd-map-codebase`, `/tab`, or a regular chat turn |
+| **Analysis / architecture advice** without an attached story | Epico artifacts (`story.md`, `design.md`) are the only valid containers for analysis under this plugin | A regular chat turn |
 | **Exploratory code generation** outside a story | Implementation only happens inside Executor, driven by an approved sub-task | Create a Fast-mode story if the change is small |
 | **Repo-wide refactor as a single story** | Violates the story-is-a-unit-of-work contract | Split into multiple linked stories (`based on` / `extends`) |
 | **Execution of ad-hoc scripts / commands / investigations** | Epico only executes what is declared in a sub-task's `Validation:` or `Tests:` field | Run manually outside `/epico:epico` |
-| **Debugging** a production incident | Debug flows live elsewhere and require different artifacts | `/gsd-debug` |
+| **Debugging** a production incident | Debug flows live elsewhere and require different artifacts | A regular chat turn |
 
 The refusal is not soft-fail; the skill surfaces a one-line rejection explaining *why* and pointing to the alternative.
 
@@ -41,7 +41,7 @@ The refusal is not soft-fail; the skill surfaces a one-line rejection explaining
 
 - **Artifacts are the contract.** The Executor and the Auditor only work because they compare code against `story.md`, `design.md`, and `tasks.md`. Without those artifacts, the sub-agent pipeline has no anchor — the 6-step protocol degenerates into ad-hoc prompting.
 - **Scope discipline prevents drift.** Every Epico run is traceable R-number → design-component → sub-task → commit. Accepting "just analyze this" or "just refactor this" breaks the chain and erodes the value proposition.
-- **Claude Code has better tools for the rest.** `/review`, `/security-review`, `/code-review`, `/gsd-debug`, `/gsd-explore`, `/tab`, and plain chat cover analysis, review, and exploration. Epico's job is to formalize *decided* work, not to explore or audit *existing* work.
+- **Claude Code has better tools for the rest.** `/review`, `/security-review`, `/code-review` and plain chat cover analysis, review, debugging and exploration. Epico's job is to formalize *decided* work, not to explore or audit *existing* work.
 
 ---
 

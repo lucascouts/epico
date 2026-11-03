@@ -126,6 +126,7 @@ Artifacts live in `.epico/stories/NNN-kebab-case/`. Whether git tracks them is a
 | `reviewer` | Cross-artifact review — gaps, consistency, orphan wiring (Full mode) |
 | `executor` | 6-step implementation protocol (context → implementation → design fidelity → validation → refactor-or-tests → report); step 5 is conditional — Refactor for a test-first sub-task, Tests for a test-after one. The report ends in a machine-liftable **closing block** (sub-task id, outcome `done` / `close-tilde` + qualifier + reason / `failed`, pre-authored commit message; `failed` closes nothing). It marks no box and runs no `git commit`: the main agent lifts that block into `scripts/close-subtask.sh`, the one writer of the checkbox grammar |
 | `tech-reviewer` | Correctness at technology boundaries (templates, SQL, APIs). Holds `Bash` for **measurement only** — never a mutation of files or git state — so a finding that rests on a runnable check carries the command and its output instead of an argument |
+| `final-reviewer` | Fresh review of finished lean-route work for a beginner: reports each gap with the command that reproduces it, never edits |
 | `auditor` | Compares built code against story + design; detects scope creep. Writes `.draft/audit-report.yaml` on the same before-the-summary contract; its `Write` reaches that one path and nothing else |
 
 ### Automatic validation
@@ -141,7 +142,7 @@ epico/
 ├── .claude-plugin/plugin.json   # manifest (name, userConfig, homepage, repository)
 ├── settings.json                # plugin defaults (subagentStatusLine)
 ├── skills/epico/SKILL.md         # main skill (/epico:epico)
-├── agents/                      # 6 sub-agents: analyst, test-advisor, reviewer, executor, tech-reviewer, auditor
+├── agents/                      # 7 sub-agents: analyst, test-advisor, reviewer, executor, tech-reviewer, auditor, final-reviewer
 ├── hooks/hooks.json             # 4 hook events (PreToolUse, PostToolUse, SessionStart, SubagentStop); the guards fail closed
 ├── output-styles/epic.md        # optional structured output style
 ├── bin/                         # epico-* wrappers on PATH — Claude Code CLI only; a surface without a shell (claude.ai, Cowork) has none

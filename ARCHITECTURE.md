@@ -101,6 +101,7 @@ Each `agents/*.md` declares its allowed tools. Narrower scopes catch drift early
 - `auditor`: `Read, Glob, Grep, Bash, LSP, Write` — `LSP` reads symbols; `Write` reaches exactly two paths, `.draft/validation-report.yaml` (validation, Part 1) and `.draft/audit-report.yaml` (audit, Part 2)
 - `test-advisor`: `Read, Write, Bash, Glob, Grep` — it authors the failing tests for test-first sub-tasks (`Write`) and runs them to capture Red evidence (`Bash`). Its scope covers `Unit`, `Integration` and `E2E` sub-tasks — an `E2E` test is authored against the story's selected E2E tool (see [Preferred-tooling policy](#preferred-tooling-policy)) with Red-phase verification **deferred to Run mode**, so for those sub-tasks the Test Advisor writes the file but does not run `Bash`.
 - `analyst`, `reviewer`: read-only surfaces
+- `final-reviewer`: `Read, Glob, Grep, Bash` — `Bash` runs the project's check and reproduces each finding inside its own temporary copy, never in the project
 - `tech-reviewer`: `Read, Glob, Grep, Bash, WebFetch, WebSearch` — `Bash` is measurement only (linters, compilers, greps, query plans), never a mutation of files or git state, so a finding that rests on a runnable check can carry the command and the output backing it
 
 The Auditor's two report writes are **carve-outs, not licences**: each part names its one file, creates `.draft/` on demand, and treats any other write as a protocol violation. Nothing enforces that at runtime — the guard is the exact-set grant assertion in `tests/reports-by-artifact-policy.bats`, which reddens when a tool lands on an agent this list does not name.
@@ -114,6 +115,7 @@ Each `agents/*.md` also declares a reasoning `effort:`. The tier is a cost decis
 | `executor` | `high` | Writes the code. `max` wrote the same passing tests on a large closed-spec sub-task for several times the cost and wall clock. |
 | `auditor` | `high` | Holds the semantic judgment the rest of the pipeline is priced against. Measured against `max` on fixtures with planted defects: every planted defect found in every arm, at about half the cost and wall clock. |
 | `reviewer` | `high` | Cross-artifact gaps are found by reasoning over three documents at once. |
+| `final-reviewer` | `high` | Finds what breaks in work it did not write, and must reproduce each finding before it reports it. |
 | `tech-reviewer` | `high` | Correctness at technology boundaries — the defect is precisely what a generalist would not think to look for. |
 | `test-advisor` | `high` | Authoring a test that fails for the right reason is a design act, not a transcription. |
 | `analyst` | `medium` | Discovery: scans structure, samples representative files, reports what it found. |

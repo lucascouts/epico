@@ -6,7 +6,7 @@ Loaded when triage reads the engineering level as `experiment` ([triage.md](tria
 
 ## What it does not write
 
-**No story.** Nothing under `.epico/stories/`, no `epico-next-number`, no `tasks.md`, no proposal to confirm, no sub-agent, no `epico-close` or `epico-progress`. The work is the deliverable and the closing message is its record. A thing nobody will maintain has no plan for anyone to read later.
+**No story.** Nothing under `.epico/stories/`, no `epico-next-number`, no `tasks.md`, no proposal to confirm, no sub-agent but the final reviewer below, no `epico-close` or `epico-progress`. The work is the deliverable and the closing message is its record. A thing nobody will maintain has no plan for anyone to read later.
 
 **Never inside an existing story.** A run of story NNN follows [run-mode.md](run-mode.md) whatever its level; this route is an entrance for new work only.
 
@@ -30,11 +30,15 @@ The [security floor](quality-catalog.md#the-security-floor--five-items-no-level-
 
 **Reach — nothing leaves the machine unless the requester asked for that exact step.** No upload to a file host or a paste site, no repository created or pushed, no login to an outside account, no message sent, no file written outside the project and its own temporary directory, and no `rm -rf` with a glob outside them. When the requester cannot reach what was built — the program runs where they are not — say so plainly and tell them how to get it; **never move it for them**. A yes/no question is not the ask: a `layperson` cannot weigh what publishing exposes, so the step comes from their own words or not at all.
 
+**Host — every process the run started is stopped before the closing**, unless the requester asked to keep it running; then the closing says how to stop it, in one line. And **nothing opens on the requester's desktop unasked** — no browser, terminal or file manager launched for them: show the result in the chat, and open a window only when they asked for that window. A server left running holds a port and memory nobody knows about, and a window that appears unasked is a surprise on someone else's screen.
+
 ## Done means the check passed
 
 **Before the code, list the failure cases first** — every rule the request states about bad input, end of input or the data file, and each floor case — one line each, written as the names of the tests, before any code and never narrated in the chat. They are the cases a run that skips the plan forgets first. Then **one automated test per case**, plus tests for what was built; **a case whose test did not run is not done**, and the closing's `Not verified:` line names it. Then **the project's whole check** — tests, plus lint or type check where the stack has one — **run and fixed until it passes**. Run the program once the way the requester will. **A web page is checked at the URL the server itself printed** — started on a free port, or port 0, never a port another program may hold — with `curl` before it is called working; a page answered by someone else's server is the false pass this rule exists for.
 
 **Then one converge pass**: re-read the request and the floor above against what was built. Each gap it finds is reproduced first — a command whose output shows it — and fixed only then: no reproduction, no change. The pass adds work, never re-plans it, and it stops at the first pass that finds nothing ([run-end.md](run-end.md#converge)).
+
+**For a `layperson`, the converge pass is a fresh reviewer's.** Spawn `epico:final-reviewer` once, **after the commit** — so the review sees the work as it will be kept — with the request verbatim and the project directory: it reads code it did not write and reports each gap with the command that reproduces it, and it never edits. A builder re-reading its own work sees what it meant to write; a beginner cannot review it for them. Run each reported command yourself — **only a finding the main agent reproduces is fixed**, then the check runs again and the fix is committed; an `unverified` line becomes a `Not verified:` note, never a change. One review, one round of fixes: a second review is not spawned.
 
 ## The closing
 

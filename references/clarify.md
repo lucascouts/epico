@@ -43,6 +43,14 @@ the plain register, and both get the context and the example.
   Portuguese; never the English marker in another language — its reason
   in one line, and each alternative's trade-off in one line. Never an open
   "how do you want this built?".
+- **For a `layperson`, a routine round becomes numbered assumptions, confirmed at once.** When a round would
+  ask three or more questions and the requester would take the recommended
+  option on each, write them instead as a numbered list — each line the
+  choice taken and its consequence in their words — under one question
+  with two answers: *all right* / *change number N*. One question in the
+  budget instead of three or more, and a beginner reads a list faster than
+  they answer a quiz. A question whose answer genuinely splits the plan
+  stays a question.
 - **Rounds are free in size, and built from what the last one left open.**
   Bundle only questions whose answers cannot change each other; a question
   whose answer can prune another goes alone, and first. Before composing
