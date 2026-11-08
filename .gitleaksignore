@@ -67,21 +67,21 @@ b38a4ae4afca7a75233acc1ab9816d453c6e1e42:tests/secrets-allowlist.bats:aws-access
 # investigates any more.
 .epico/archive/005-archive-in-the-flow/.draft/authored-tests/tests/archive-story.bats:aws-access-token:276
 .epico/archive/005-archive-in-the-flow/.draft/authored-tests/tests/archive-story.bats:aws-access-token:289
-tests/archive-story.bats:aws-access-token:1391
-tests/archive-story.bats:aws-access-token:1404
-tests/archive-story.bats:aws-access-token:1583
-tests/archive-story.bats:aws-access-token:1597
-tests/archive-story.bats:aws-access-token:1601
-tests/archive-story.bats:aws-access-token:1609
-tests/archive-story.bats:aws-access-token:1611
-tests/archive-story.bats:aws-access-token:1627
-tests/archive-story.bats:aws-access-token:1634
-tests/archive-story.bats:aws-access-token:1635
-tests/archive-story.bats:aws-access-token:1648
-tests/archive-story.bats:aws-access-token:1667
-tests/archive-story.bats:aws-access-token:1676
-tests/archive-story.bats:aws-access-token:1701
-tests/archive-story.bats:aws-access-token:1790
+tests/archive-story.bats:aws-access-token:18
+tests/archive-story.bats:aws-access-token:31
+tests/archive-story.bats:aws-access-token:210
+tests/archive-story.bats:aws-access-token:224
+tests/archive-story.bats:aws-access-token:228
+tests/archive-story.bats:aws-access-token:236
+tests/archive-story.bats:aws-access-token:238
+tests/archive-story.bats:aws-access-token:254
+tests/archive-story.bats:aws-access-token:261
+tests/archive-story.bats:aws-access-token:262
+tests/archive-story.bats:aws-access-token:275
+tests/archive-story.bats:aws-access-token:294
+tests/archive-story.bats:aws-access-token:303
+tests/archive-story.bats:aws-access-token:328
+tests/archive-story.bats:aws-access-token:417
 
 
 # The same two literals, in the suite and in its authored-test copy. Both are

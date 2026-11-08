@@ -13,7 +13,7 @@
 
 ## Testing
 - TDD: the bats case is written first and seen failing (Red) before the change that makes it pass
-- `bats tests/` runs as a normal user — root reads `chmod 000` files and turns refusal cases into false reds
+- The suite (`tests/run-suite.sh`, or `bats tests/`) runs as a normal user — root reads `chmod 000` files and turns refusal cases into false reds
 - Tests use real temp directories and real git repos; git state is never mocked
 - An assertion is never a `!`-inverted command (errexit ignores it); use `run` + a status check or a count
 
@@ -27,7 +27,7 @@
 - Lint — `shellcheck scripts/*.sh bin/*` exits 0
 - Types — omitted: bash has no type checker
 - Error handling — every script runs under `set -euo pipefail` and refuses with its reason in the JSON; the story's bats cases prove the refusal paths
-- Unit tests — `bats tests/` passes, as a normal user
+- Unit tests — `tests/run-suite.sh` passes, as a normal user (every file in parallel; `bats tests/` is the same suite in one process)
 - Lockfile and frozen install — no dependencies: the plugin installs nothing
 - Dependency vulnerabilities — no dependencies; `trivy fs .` gives the verdict
 - Secrets — `gitleaks git .` reports no leaks; the pre-commit hook runs it on staged changes
@@ -41,7 +41,7 @@
 - Security policy — `SECURITY.md` exists and names a private channel
 - Branch protection — `gh api repos/lucascouts/epico/rules/branches/main` lists `deletion`, `non_fast_forward` and `required_status_checks` (today: none — the ruleset targets no branch)
 - Minimum dependency age — Dependabot `cooldown` of 7 days on GitHub Actions
-- CI mirror — build once `docker build -t epico-act:26.04 ci/act-ubuntu-26.04`, then `act -P ubuntu-26.04=epico-act:26.04 --pull=false -j <job>` for `shellcheck`, `validate-examples`, `plugin-validate` and `bats`, from a clean clone (never a git worktree: its `.git` points outside the mount). The image is the runner's Ubuntu 26.04 (uutils coreutils) as a non-root user, so all four pass; the published act images are 24.04/GNU and root
+- CI mirror — build once `docker build -t epico-act:26.04 ci/act-ubuntu-26.04`, then `ci/act-mirror.sh <job>` for `shellcheck`, `validate-examples`, `plugin-validate` and `bats`, one job at a time, from a clean clone (never a git worktree: its `.git` points outside the mount). The wrapper runs `act` on that image with `--pull=false --action-offline-mode` and each job's apt and npm downloads in its own named volumes, so a second run downloads nothing it already has. The image is the runner's Ubuntu 26.04 (uutils coreutils) as a non-root user, so all four pass; the published act images are 24.04/GNU and root
 - Plugin schema — `claude plugin validate --strict` on `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `skills`, `agents`
 
 ## Defaults
