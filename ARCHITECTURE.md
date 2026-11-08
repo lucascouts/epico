@@ -84,6 +84,7 @@ The plugin surface maps to Claude Code's extension points:
 | `references/` | — | Mode-specific operational guides loaded on-demand by the skill. |
 | `.claude-plugin/plugin.json` | Manifest | Plugin metadata + `userConfig` schema. |
 | `assets/examples/` | — | Reference artifacts for each scale, used as format anchors. |
+| `assets/templates/docs/` | — | The optional project-docs layout `epico-docs-layout` writes at init: PRD, ARCHITECTURE, ROADMAP index, a stage file, the first ADR. |
 | `evals/` | — | Native `claude plugin eval` suite (trigger and end-to-end cases), and `README.md` — how to run it and why a trigger score must not gate anything. |
 | `tests/` | — | `bats` unit tests for scripts. |
 

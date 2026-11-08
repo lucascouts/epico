@@ -10,6 +10,10 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Added
+
+- **A `docs/` layout for new projects.** `init` offers, to a project with no ROADMAP yet, a template the checkpoint and the doc writer already read: `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/ROADMAP.md` as an index, `docs/stages/01-foundation.md` with tasks in the five-line form, and `docs/adr/0001-…` with Enforcement and Amendments. `epico-docs-layout` writes only the missing files and refuses a project that already keeps a ROADMAP.
+
 ### Fixed
 
 - **The runtime gate runs a command, never a version.** A gate written `go 1.27` declared in `go.mod` was run as `go 1.27` and recorded a false FAIL: the quality catalog now gives each stack the command that reads its declaration (Node, Go, Python, Rust, Ruby, PHP, `.tool-versions`), and the plan lint warns when a gate's first backtick span is only a version.
