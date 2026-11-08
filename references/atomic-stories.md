@@ -2,7 +2,7 @@
 
 Read at triage on every route that creates a story — a single create and a batch create — before the proposal is written.
 
-**The definition is BMAD's** (bmad-method 6.12.4: `bmad-build/workflow.md`, *Scope standard*; `bmad-create-epics-and-stories`, steps 2–4), adopted on 2026-11-08. A story is atomic when it holds all six:
+**The definition is BMAD's** (bmad-method 6.12.4: `bmad-build/workflow.md`, *Scope standard*; `bmad-create-epics-and-stories`, steps 2–4). A story is atomic when it holds all six:
 
 1. **One goal.** One cohesive, user-facing goal, even when it spans layers and files. Two or more goals means two or more deliverables of which each could be reviewed, tested and merged as its own pull request without breaking the others. Never count verbs, "and" or nouns: "add validation and show the errors" is one goal; "a dark-mode toggle, JWT login and an admin dashboard" is three. And never split one goal's layers — the table, the endpoint and the screen of one behaviour are one story.
 2. **Fits one agent.** The whole story is completable by one agent in one fresh context. The plan's own size warning is the measure ([tasks.md](tasks.md#authoring-ceiling)): past it, propose a split by goal — a proposal the user may override, never a gate.
