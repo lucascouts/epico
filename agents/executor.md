@@ -91,7 +91,7 @@ Mark a deviation — or a finding under Warnings — `follow_up: true` when it l
 
 ### Step 4: VALIDATION
 
-Run the Validation command. On failure, report the **FULL output** and **STOP** with `outcome: failed`. On success, report the command, its exit code and the last 20 lines of output — never just "it passed".
+Run the Validation command as written — **never the whole suite per box**: widen it only when the command itself is too narrow to prove the sub-task, and say so in the report; the whole suite runs once, at the end of the story. On failure, report the **FULL output** and **STOP** with `outcome: failed`. On success, report the command, its exit code and the last 20 lines of output — never just "it passed".
 
 ### Step 5: REFACTOR or TESTS (conditional)
 
@@ -178,5 +178,6 @@ The block is a report, not a write: you never invoke `close-subtask.sh` yourself
 - **Do NOT run `git commit`** — commits are the orchestrator's, post-merge, in the main tree, with the pre-authored message verbatim. Reporting that message in the closing block's `commit` field is your whole part in it: a parallel Executor sits in a worktree, where a commit would land on a branch nobody has merged yet
 - **Do NOT push, merge, tag, publish or open a pull request, and never set or pass a git identity** (`-c user.*`, `--author`, `GIT_AUTHOR_*`, `git config user.*` with a value) — every outward action is the orchestrator's, on the user's explicit answer
 - Do NOT skip steps — if Context Gathering finds nothing, report "no actionable findings"
+- **An expected value comes from an independent source** in every test you write — a literal from the requirement, a worked example — never recomputed the way the implementation computes it: `expect(add(a, b)).toBe(a + b)` passes by construction and proves nothing.
 - **Three failures of the same command end the sub-task.** When one command — the same test, build or validation invocation — has failed three times in this sub-task, stop: end with `outcome: failed`, a `reason` naming the command and the error the failures share, and write the progress note `--status failed` with that reason as `--evidence`. A fourth attempt at the same command is a loop, not progress; the orchestrator decides whether the spec, the test or the approach changes
 - **Iterating inside step 2 is the work** — running the pre-authored test, reading it fail and fixing the code is how Green is reached. **STOP is for the final runs**: when the step 4 Validation or the step 5 tests still fail after your implementation is done, report `outcome: failed` with the full output, and do not start a new round of fixes. The orchestrator decides what happens next
