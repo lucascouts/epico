@@ -184,6 +184,10 @@ If the test setup uses simplified/mocked versions of a dependency (e.g., inline 
 
 This prevents bugs that only manifest when real components interact (wrong data shapes, misconfigured wiring, incompatible interfaces).
 
+### Independent-value rule
+
+An expected value comes from an independent source — a literal the requirement states, a worked example computed by hand, the spec's own table — never recomputed the way the code will compute it. `expect(total(items)).toBe(items.reduce((s, i) => s + i.price, 0))` passes by construction and can never disagree with the code; `expect(total([{price: 10}, {price: 5}])).toBe(15)` can. A snapshot derived the way the code derives it is the same defect.
+
 ### Hostile-half rule (identity and uniqueness)
 
 For every requirement asserting that two things are the **SAME** or are **DIFFERENT** — identity, uniqueness, deduplication, equality, distinguishability — **author the case that would make the rule fire WRONGLY first**, and only then the case where it correctly holds. Order is the rule, not just coverage: a test authored after the behavior exists asks "what does this do?" and passes; only a test authored from the requirement asks "what does this forbid?" and can fail.
