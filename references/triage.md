@@ -97,6 +97,7 @@ requester:
 
 1. Detect event from request context
 2. Classify type (feature vs bugfix). **For a bugfix, split the report into four before anything else**: what was observed, what was expected, the reporter's diagnosis, and the fix they propose — the last two are hypotheses, recorded as given and never treated as findings ([bugfix.md](bugfix.md#template), *Report as Given*). A report that only names a cause ("the cache is stale") has no observation yet: ask for the symptom
+2a. **One goal per story** — read the request's goals by [atomic-stories.md](atomic-stories.md): with more than one, the proposal carries the split offer, and its confirmation settles it. The lean route and instant skip this step
 3. **Assess overall story complexity** (see table below)
 3a. **Read the engineering level** (above) — inferred from the request, never asked; `tool` when the context does not settle it; proposed with its multiple in one line. **WHEN it reads `experiment`, stop here and follow [lean-route.md](lean-route.md)**: the steps below, the proposal and every story artifact are skipped — an `experiment` is done directly, with the security floor, and writes no story
 4. **Recommend mode with trade-off explanation** — from the request and the table, for every level; the level never changes the mode (above). WHEN the request is too vague for the table and clarify leaves it unsettled, propose `defaultScale` (SKILL.md *Plugin options*)
