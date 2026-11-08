@@ -7,7 +7,7 @@ What a version cut involves. Where a step has a known trap, the trap is named ra
 Local results are the evidence that the work is done — CI confirms them, it does not produce them.
 
 ```bash
-bats tests/                              # as a normal user; see the trap below
+tests/run-suite.sh                       # every file in parallel, as a normal user; see the trap below
 shellcheck scripts/*.sh bin/*
 for e in assets/examples/*.md; do bash scripts/validate-story.sh --help >/dev/null; done
 gitleaks protect --staged=false          # and `gitleaks detect --log-opts main..HEAD`

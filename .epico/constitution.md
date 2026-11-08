@@ -13,7 +13,7 @@
 
 ## Testing
 - TDD: the bats case is written first and seen failing (Red) before the change that makes it pass
-- `bats tests/` runs as a normal user — root reads `chmod 000` files and turns refusal cases into false reds
+- The suite (`tests/run-suite.sh`, or `bats tests/`) runs as a normal user — root reads `chmod 000` files and turns refusal cases into false reds
 - Tests use real temp directories and real git repos; git state is never mocked
 - An assertion is never a `!`-inverted command (errexit ignores it); use `run` + a status check or a count
 
@@ -27,7 +27,7 @@
 - Lint — `shellcheck scripts/*.sh bin/*` exits 0
 - Types — omitted: bash has no type checker
 - Error handling — every script runs under `set -euo pipefail` and refuses with its reason in the JSON; the story's bats cases prove the refusal paths
-- Unit tests — `bats tests/` passes, as a normal user
+- Unit tests — `tests/run-suite.sh` passes, as a normal user (every file in parallel; `bats tests/` is the same suite in one process)
 - Lockfile and frozen install — no dependencies: the plugin installs nothing
 - Dependency vulnerabilities — no dependencies; `trivy fs .` gives the verdict
 - Secrets — `gitleaks git .` reports no leaks; the pre-commit hook runs it on staged changes

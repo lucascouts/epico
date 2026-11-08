@@ -54,7 +54,8 @@ jobs:
         run: sudo apt-get update -qq && sudo apt-get install -y bats jq python3-yaml
       - name: Run tests
         # The whole directory, never a hand-maintained list: an enumerated list
-        # silently drops every suite added after it.
+        # silently drops every suite added after it. One bats process per file,
+        # as many at once as the runner has cores (tests/run-suite.sh).
         #
         # RUNNING THIS JOB UNDER `act`: use the image in ci/act-ubuntu-26.04
         # (`act -P ubuntu-26.04=epico-act:26.04 --pull=false`). The published
@@ -62,7 +63,7 @@ jobs:
         # 26.04's uutils changes, and they run as root, where the cases that
         # assert a script refuses an unreadable file fail as false reds. The
         # local image is 26.04 and runs as the non-root `runner` user.
-        run: bats tests/
+        run: tests/run-suite.sh
 
   validate-examples:
     name: validate-examples
