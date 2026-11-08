@@ -165,7 +165,8 @@ result() {  # <id> — the result the run recorded for one entry
   grep -q 'then run \*\*`epico-validate-run --story <dir>`\*\*' "$v"
   grep -q "\*\*On its \`verdict: fail\`, spawn nothing\*\*" "$v"
   grep -q '\*\*Settle only the entries whose result is `JUDGE`\*\*' "$v"
-  grep -q '\*\*The revalidation re-checks the failures, never the whole story.\*\*' "$v"
+  grep -q '\*\*The revalidation re-runs what the fix can reach, and proves the rest unchanged.\*\*' "$v"
+  grep -q 'epico-validate-run --story <dir> --since-last' "$v"
   grep -q '\*\*bounded to one fix round\*\*' "$v"
   grep -q '\*\*Settle only the `JUDGE` entries\*\*' "$ROOT/agents/auditor.md"
 }
