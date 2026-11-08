@@ -200,6 +200,8 @@ bash "$EPICO_PLUGIN_ROOT/scripts/validate-story.sh" .epico/stories/001-feature/ 
 
 When the plugin is active, the scripts are also on PATH as `epico-validate`, `epico-xref`, `epico-archive`, `epico-doctor`, `epico-test-diff` and the other `epico-*` wrappers.
 
+`epico-doctor` runs at session start and stays fast. `epico-doctor --deep` adds the checks that read across the project's documents — each open story's `refs:` and `roadmap:`, ADR numbers, `Supersedes` targets and Enforcement lines, `version`/`as_of` on the root docs, task IDs written twice, and the git policy verdict — as warnings, changing nothing.
+
 ### What a story actually cost
 
 Prefer Claude Code's own numbers. `/usage` shows the session's spend; a `claude -p --output-format json` run returns `modelUsage` and `total_cost_usd`; and OpenTelemetry splits tokens by main agent and sub-agent (`claude_code.token.usage`, attribute `query_source`) — start Claude Code with `CLAUDE_CODE_ENABLE_TELEMETRY=1 OTEL_METRICS_EXPORTER=console OTEL_LOG_TOOL_DETAILS=1` and filter on `plugin.name=epic`.

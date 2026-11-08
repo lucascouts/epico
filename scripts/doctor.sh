@@ -25,22 +25,26 @@ set -euo pipefail
 
 usage() {
   cat <<'USAGE'
-Usage: doctor.sh [--epico-dir <dir>] [--stale-days <n>] [--stall-minutes <n>] [--summary]
+Usage: doctor.sh [--epico-dir <dir>] [--stale-days <n>] [--stall-minutes <n>] [--summary] [--deep]
 
   --epico-dir <dir>      The .epico directory. Default: the nearest .epico at or above the cwd.
   --stale-days <n>      A story with no boxes untouched this many days is a dormant draft. Default 7.
   --stall-minutes <n>   An in-progress story with no progress note this long is stalled. Default 15.
   --summary             One line instead of JSON; nothing when there is nothing to report.
+  --deep                Also the checks that read across the project's documents (doctor-deep.sh):
+                        refs:, roadmap:, ADRs, root-doc frontmatter, repeated task IDs, the git policy
+                        verdict. Never at session start: it reads every open story and every doc.
 USAGE
 }
 
-EPICO_DIR="" STALE_DAYS=7 STALL_MIN=15 SUMMARY=false
+EPICO_DIR="" STALE_DAYS=7 STALL_MIN=15 SUMMARY=false DEEP=false
 while [ $# -gt 0 ]; do
   case "$1" in
     --epico-dir | --epic-dir) EPICO_DIR="${2-}"; shift 2 ;;
     --stale-days) STALE_DAYS="${2-}"; shift 2 ;;
     --stall-minutes) STALL_MIN="${2-}"; shift 2 ;;
     --summary) SUMMARY=true; shift ;;
+    --deep) DEEP=true; shift ;;
     -h | --help) usage; exit 0 ;;
     *) echo "doctor.sh: unknown argument: $1" >&2; usage >&2; exit 2 ;;
   esac
@@ -193,6 +197,11 @@ if git -C "$ROOT" rev-parse --git-dir >/dev/null 2>&1; then
       add warning worktree-copy "$WT/.epico" "untracked .epico/ copy inside a worktree — the main tree's is the one modes read"
     fi
   done < <(git -C "$ROOT" worktree list --porcelain 2>/dev/null | grep '^worktree ' || true)
+fi
+
+# --- Deep checks, only when asked ---
+if $DEEP; then
+  while IFS= read -r f; do [ -n "$f" ] && FINDINGS+=("$f"); done < <(bash "$SCRIPT_DIR/doctor-deep.sh" --root "$ROOT" 2>/dev/null || true)
 fi
 
 # --- Report ---
