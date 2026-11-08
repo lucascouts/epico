@@ -265,7 +265,7 @@ init_isolated_repo() {
   # because nothing measured them. `keys` is sorted, so this pins the SET rather
   # than the emission order, which is the emitter's business and not a contract
   # any consumer reads.
-  [ "$(echo "$output" | jq -r 'keys | join(",")')" = "git,policy,verdict" ]
+  [ "$(echo "$output" | jq -r 'keys | join(",")')" = "effective,git,policy,verdict" ]
 }
 
 # --- One case per verdict arm -----------------------------------------------
