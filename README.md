@@ -318,4 +318,4 @@ MIT — see [LICENSE](LICENSE).
 
 ## Version
 
-0.27.1 — see [CHANGELOG](./CHANGELOG.md).
+0.28.0 — see [CHANGELOG](./CHANGELOG.md).

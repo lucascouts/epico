@@ -10,6 +10,25 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+## [0.28.0] — 2026-11-08
+
+A revalidation re-runs only what a fix can reach; each box runs its narrowest test; dependencies come from the machine's caches; a request with several goals is offered as several stories.
+
+**Minimum Claude Code:** 2.1.295, unchanged.
+
+### Added
+
+- **`epico-validate-run --since-last`**: every validation records the commit and the work tree it checked; a revalidation re-runs the failures, the changed entries and what the changed paths can reach — and everything, with the reason, when it cannot prove the scope.
+- **`references/dependency-cache.md`**: installs, tool data, images, CI and E2E browsers from the machine's caches, never past a security update and never with an integrity check off.
+- **`references/atomic-stories.md`**: one goal per story, by BMAD's definition; triage offers the split in its proposal, and `--auto` keeps the goals together with the warning logged.
+- **Foundation pillars** — security, stability, performance, in that order — in `PURPOSE.md` and `ARCHITECTURE.md`, and in the pull request template.
+
+### Changed
+
+- Entries sharing a command run it once per validation.
+- A box's `Validation:` is the narrowest command that proves it; the whole suite runs once, at the end; expected values in tests come from an independent source.
+- The repository's suite runs every file in parallel (`tests/run-suite.sh`), and `ci/act-mirror.sh` runs a CI job from local caches.
+
 ## [0.27.1] — 2026-11-03
 
 The converge pass and the final review run silently.
@@ -1836,7 +1855,8 @@ _(Plugin `bin/` requires Claude Code v2.1.91+.)_
 - `/epic:epic stories teams {status|enable|disable}` for direct flag management.
 - Per-project opt-out via `.epic/teams-opt-out` sentinel file.
 
-[Unreleased]: https://github.com/lucascouts/epico/compare/v0.27.1...HEAD
+[Unreleased]: https://github.com/lucascouts/epico/compare/v0.28.0...HEAD
+[0.28.0]: https://github.com/lucascouts/epico/compare/v0.27.1...v0.28.0
 [0.27.1]: https://github.com/lucascouts/epico/compare/v0.27.0...v0.27.1
 [0.27.0]: https://github.com/lucascouts/epico/compare/v0.26.1...v0.27.0
 [0.26.1]: https://github.com/lucascouts/epico/compare/v0.26.0...v0.26.1
