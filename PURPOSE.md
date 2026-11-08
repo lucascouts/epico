@@ -6,6 +6,20 @@ Every feature of this plugin exists to serve that purpose. Anything outside it i
 
 ---
 
+## Foundation pillars
+
+Three pillars weigh every change to this plugin, in this order: **Security, Stability, Performance.** When two of them pull apart, the earlier one wins.
+
+- **Security** — the plugin never leaks a secret, never runs input as code, and never acts outside the machine — a push, a publish, a deletion — without the user's explicit yes. A guard that cannot decide refuses; it never passes.
+- **Stability** — the same input gives the same result. Scripts speak one JSON contract, write through a temporary file and a rename, and can be run again safely; every behaviour has a test written before it. When a proof is missing, the plugin takes the slower path that is known to be correct.
+- **Performance** — the user's tokens and minutes are spent only where they buy something: deterministic work goes to scripts, each check runs once per state of the code, and nothing is done again that a proof shows unchanged.
+
+The order is the rule for every trade-off. A shortcut that saves time is taken only when the result provably stays the same — re-running only what a change can reach needs the diff to prove that reach, and a diff that cannot be read re-runs everything — and a cache or a shortcut never skips a security check. Every pull request states its effect on each pillar ([template](.github/pull_request_template.md)); the mechanisms that enforce them are mapped in [ARCHITECTURE.md](ARCHITECTURE.md#foundation-pillars).
+
+The pillars govern the plugin itself. What the plugin asks of the projects it builds is the quality catalog's business, bounded by the engineering level.
+
+---
+
 ## In scope
 
 Epico is responsible for:
