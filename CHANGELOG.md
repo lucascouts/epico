@@ -17,6 +17,7 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ### Fixed
 
+- **`epico-validate-run --since-last` no longer misses a same-size edit made in the second of the last commit.** The work-tree fingerprint copies git's index; the copy now keeps the index's mtime, so git's racy-git check re-reads the file instead of trusting its stat cache.
 - **The runtime gate runs a command, never a version.** A gate written `go 1.27` declared in `go.mod` was run as `go 1.27` and recorded a false FAIL: the quality catalog now gives each stack the command that reads its declaration (Node, Go, Python, Rust, Ruby, PHP, `.tool-versions`), and the plan lint warns when a gate's first backtick span is only a version.
 
 ## [0.28.0] — 2026-11-08

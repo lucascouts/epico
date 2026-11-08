@@ -175,7 +175,11 @@ fingerprint() {
   tmp="$(mktemp)" || return 0
   idx="$(git -C "$TOP" rev-parse --git-path index)"
   case "$idx" in /*) ;; *) idx="$TOP/$idx" ;; esac
-  if [ -f "$idx" ]; then cp "$idx" "$tmp"; else rm -f "$tmp"; fi
+  # -p keeps the index's mtime, which git's racy-git check reads
+  # (Documentation/technical/racy-git.txt): an entry whose mtime is not older
+  # than the index's is re-read. A fresh mtime on the copy made a same-size
+  # edit in that second look clean wherever git compares whole seconds.
+  if [ -f "$idx" ]; then cp -p "$idx" "$tmp"; else rm -f "$tmp"; fi
   if GIT_INDEX_FILE="$tmp" git -C "$TOP" add -A -- . ':(exclude,glob)**/.epico/**' >/dev/null 2>&1 &&
     GIT_INDEX_FILE="$tmp" git -C "$TOP" rm -r -q --cached --ignore-unmatch -- ':(glob)**/.epico/**' >/dev/null 2>&1; then
     tree="$(GIT_INDEX_FILE="$tmp" git -C "$TOP" write-tree 2>/dev/null || true)"
