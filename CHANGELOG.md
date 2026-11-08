@@ -10,6 +10,10 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 ## [Unreleased]
 
+### Fixed
+
+- **The runtime gate runs a command, never a version.** A gate written `go 1.27` declared in `go.mod` was run as `go 1.27` and recorded a false FAIL: the quality catalog now gives each stack the command that reads its declaration (Node, Go, Python, Rust, Ruby, PHP, `.tool-versions`), and the plan lint warns when a gate's first backtick span is only a version.
+
 ## [0.28.0] — 2026-11-08
 
 A revalidation re-runs only what a fix can reach; each box runs its narrowest test; dependencies come from the machine's caches; a request with several goals is offered as several stories.

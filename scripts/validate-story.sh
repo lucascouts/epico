@@ -877,6 +877,14 @@ if [[ "$HAS_TASKS" == true ]]; then
   )
   FLOOR_SEEN=(false false false false false)
 
+  # A GATE THAT LEADS WITH A VERSION. validate-run.sh runs a gate's first
+  # backtick span, so `go 1.27` declared in `go.mod` ran `go 1.27`, a usage
+  # error, and recorded a false FAIL (0.28 battery, 2026-11-08). A WARNING, not
+  # an error: the plan is still valid, and the fix is one rewrite of the line.
+  # shellcheck disable=SC2016  # the backticks are literal Markdown, not expansion
+  gate_span_re='^- \[[ x~]\] [^`]*`([^`]+)`'
+  version_only_re='^([A-Za-z][A-Za-z0-9_.+-]*[[:space:]]*)?[v~^>=<]*[[:space:]]*[0-9]+(\.[0-9x*]+)*$'
+
   while IFS= read -r line || [[ -n "$line" ]]; do
     LINE_NO=$((LINE_NO + 1))
     # The two exclusions have to see EVERY line, so they precede the box filter:
@@ -904,6 +912,9 @@ if [[ "$HAS_TASKS" == true ]]; then
           FLOOR_SEEN[floor_i]=true
         fi
       done
+      if [[ "$line" =~ $gate_span_re ]] && [[ "${BASH_REMATCH[1]}" =~ $version_only_re ]]; then
+        add_warning "tasks.md line $LINE_NO: the gate's first backtick span is only a version, \`${BASH_REMATCH[0]}\` — Validate runs that span as the check and records a false FAIL; lead with the command that reads the declaration, e.g. \`grep -Eq '^go [0-9]' go.mod\` (references/quality-catalog.md, Supported and declared runtime)"
+      fi
     fi
     # The Commit-field anchor lint, argued in full at its own section
     # above. It rides THIS loop rather than opening a second pass for one
