@@ -86,6 +86,8 @@ The `tech_profile` is passed to the Executor sub-agent prompt. Boundaries trigge
 
 **Each detected language maps to its section of [language-rules.md](language-rules.md)** — the secure-coding rules a linter does not catch — and only those sections are read, never the whole file. A detected language with no section there names none: say so in one line — `no language-rules.md section for <language>` — without inventing rules for it.
 
+**A sub-task that installs dependencies, builds an image, runs a gate tool or sets up E2E reads [dependency-cache.md](dependency-cache.md) first**, on either route: dependencies, vulnerability databases, rulesets, images and browsers come from the machine's caches, never downloaded again on every check, and never past a security update.
+
 ## Execution Threshold
 
 **The route is chosen per sub-task, and it is not read off `Complexity`.** `Complexity` is a parent-task field — [tasks.md](tasks.md#metadata-line-fields) makes it *Always on parent* and merely optional on the sub-task — so routing on it alone sends every sub-task of a `Moderate` parent to a sub-agent. That is the expensive mistake: a sub-agent starts with an empty context and has to re-read what the orchestrator is already holding, so delegating work the orchestrator could do buys isolation nobody needed and pays for it in rediscovery.

@@ -32,12 +32,12 @@ has() { # has <label> <block> <extended regex> — case-insensitive
 
 # --- R1: the CI mirror -------------------------------------------------------
 
-@test "S1: CI mirror is a By context row with the workflows signal and act -j" {
+@test "S1: CI mirror is a By context row with the workflows signal and act -j from the local caches" {
   ctx=$(section "$CATALOG" '^## By context' '^## ')
   r=$(row "$ctx" "CI mirror")
   [ -n "$r" ]
   has "S1 signal" "$r" '`\.github/workflows/`'
-  has "S1 command" "$r" '`act -j <job>`'
+  has "S1 command" "$r" '`act --pull=false --action-offline-mode -j <job>`'
 }
 
 @test "S2: the CI mirror row mirrors the runner's clean checkout" {
