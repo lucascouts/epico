@@ -17,7 +17,7 @@ Triggered by `/epico:epico stories create --batch <doc>`. One interview, N stori
 
 The interview is the expensive part of creating a story, and creating stories one at a time repeats it wholesale. This mode amortizes the **conversation**. It amortizes nothing else — every story still runs its scale's full pipeline, including Phase 3 with the Test Advisor at engineering level `project` or `product`, and every materialized story still has to pass validation clean.
 
-`<doc>` is a path: an audit report, a proposal, an improvement plan. A batch with no document is out of scope.
+`<doc>` is a path: an audit report, a proposal, an improvement plan. A batch with no document is out of scope — except a split's request: when a single create's one-goal check is answered **Split** ([atomic-stories.md](atomic-stories.md)), the request itself is the source, recorded verbatim, and the batch starts at its consolidated triage with one row per goal.
 
 ## Procedure
 
@@ -41,16 +41,18 @@ The document is read once and stays the batch's single source: every story deriv
 
 Read the document for **story-shaped items**: a stated problem with a stated remedy that a person could implement and check. Each proposal carries the same three fields a single create's triage produces — event, type and scale — from the triage table in [SKILL.md](../skills/epico/SKILL.md). A batch may mix scales freely; scale is decided per proposal, never per batch.
 
+**Every proposal is atomic** by [atomic-stories.md](atomic-stories.md): one goal, no forward dependency — a row depends only on rows above it — and only what its own behaviour needs. Read the proposals together for file churn before the table: rows that keep editing the same core files are merged, unless the split buys risk isolation, an early feedback loop or a context that fits.
+
 **Zero story-shaped items is a result, not a failure to try harder.** Report that the document yielded none and stop. A batch is never padded with invented stories: the cost of a fabricated story is paid later, by whoever tries to implement it.
 
 ## 3. One consolidated triage
 
 One block, N rows, one confirmation:
 
-| # | Proposed story | Type | Scale | Why this scale |
-|---|---|---|---|---|
-| 1 | `<slug>` | feature | full | new contract between services — the architectural signal Full asks for |
-| 2 | `<slug>` | bugfix | fast | — |
+| # | Proposed story | Type | Scale | Blocked by | Why this scale |
+|---|---|---|---|---|---|
+| 1 | `<slug>` | feature | full | — | new contract between services — the architectural signal Full asks for |
+| 2 | `<slug>` | bugfix | fast | 1 | — |
 
 **When the source is a ROADMAP or stage file with numbered tasks**, the table gains a `Roadmap` column naming the task IDs each proposed story works on (`2.4.1, 2.4.2`), and each story's `tasks.md` gets them as `roadmap: [2.4.1, 2.4.2]` ([clarify.md](clarify.md#the-roadmap-tasks-only-when-the-project-numbers-them)). Several tasks may form one story, and one large task may be split across stories; every numbered task of the source appears in at least one row or is named below the table as left out, with the reason.
 

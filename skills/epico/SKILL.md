@@ -267,7 +267,7 @@ When a command references `NNN`:
 
 ## Triage Protocol
 
-**Create: read [triage.md](../../references/triage.md) now, before anything is written** — the runtime precheck, the three scales, the workflow variants and the triage protocol with its proposal line. An `experiment` reading hands off to [lean-route.md](../../references/lean-route.md).
+**Create: read [triage.md](../../references/triage.md) now, before anything is written** — the runtime precheck, the three scales, the workflow variants and the triage protocol with its proposal line. An `experiment` reading hands off to [lean-route.md](../../references/lean-route.md). Two goals or more: [atomic-stories.md](../../references/atomic-stories.md).
 
 **Then load the requester's register, before the plan is written** — triage reads `requester.level`, and the register is where that level's defaults live: [plain-register.md](../../references/plain-register.md) for a `layperson`, [developer-register.md](../../references/developer-register.md) for a `developer`. Read the whole file; it is short. A layperson's defaults are not optional: tests are written and run in every scale, git is never a question, and nothing technical is asked — skipping the register is how a beginner's program ships with no test.
 
