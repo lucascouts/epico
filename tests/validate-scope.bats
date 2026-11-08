@@ -156,6 +156,26 @@ commit_all() { git -C "$PROJ" add -A -- . ':(exclude).epico' && git -C "$PROJ" -
   jq -e '.scope.changed[] | select(.path == "package-lock.json" and .class == "lock")' "$STORY/.draft/validation-run.json"
 }
 
+@test "since-last sees a same-size edit whose mtime ties the index's, where git compares whole seconds" {
+  # Racy git (git's Documentation/technical/racy-git.txt): an entry whose mtime
+  # is not older than the index file's is re-read, because the stat cache
+  # cannot tell an edit made in that same second. The fingerprint works on a
+  # copy of the index, so the copy must keep the index's mtime — a fresh one
+  # turned the entry "clean" and the edit invisible (2 in 60 runs on a runner
+  # comparing whole seconds). Forced here: whole seconds, and the mtimes tied.
+  export GIT_CONFIG_PARAMETERS="'core.checkstat=minimal'"
+  printf '{"lockfileVersion":3,"packages":{"node_modules/left-pad":{"version":"1.3.0"}}}\n' > "$PROJ/package-lock.json"
+  past=$(( $(date +%s) - 100 ))
+  touch -d "@$past" "$PROJ/package-lock.json"
+  commit_all "chore(001): lock"
+  touch -d "@$past" "$PROJ/.git/index"
+  vr
+  printf '{"lockfileVersion":3,"packages":{"node_modules/left-pad":{"version":"1.3.1"}}}\n' > "$PROJ/package-lock.json"
+  touch -d "@$past" "$PROJ/package-lock.json"
+  vr --since-last
+  [ "$(rule)" = code ]
+}
+
 @test "since-last, a lockfile whose resolved version moved re-runs everything" {
   printf '{"lockfileVersion":3,"packages":{"node_modules/left-pad":{"version":"1.3.0"}}}\n' > "$PROJ/package-lock.json"
   commit_all "chore(001): lock"
