@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Wrapper over scripts/resolve-refs.sh, on PATH while the Epico plugin is enabled.
+# Usage is identical to the underlying script.
+exec bash "$(dirname "$0")/../scripts/resolve-refs.sh" "$@"

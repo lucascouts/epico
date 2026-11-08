@@ -11,6 +11,15 @@
 
 Include findings assertively in triage. If user mentions files directly, use them without asking.
 
+## Document References
+
+A story's `refs:` ([tasks.md](tasks.md)) names the sections of the project's documents it starts from, as `<doc>#<anchor>`. `epico-refs --story <dir>` resolves each to a file and a line range; read those ranges first. **Refs are hints, never limits**: read whatever else the work needs, and a ref that does not resolve is reported, never a reason to stop.
+
+- `<doc>` is found at the root or under `docs/`: `ARCHITECTURE` → `ARCHITECTURE.md` or `docs/ARCHITECTURE.md`; `stages/03` → `docs/stages/03-*.md`; `ADR-12` → `adr/0012-*.md`. A doc that matches two files is ambiguous, and both are named.
+- `<anchor>` is a number (`#5.2`, the heading that starts with it, so `4.1` never matches `4.10`), a task ID in a stage file (`#3.1.2`, the task line and its sub-bullets), or a GitHub heading slug (`#decision`).
+
+Write `refs:` when the project's documents hold the rule or decision the story builds on — at Standard and Full, and from a stage task's `REF:` line when the story comes from one.
+
 ## Prior Knowledge
 
 Runs in **all scales**, and only when triage step 7a found memory available ([mcp-integration.md](mcp-integration.md#memory-mcp)). Two calls, before the Analyst is spawned and before any inline question is asked:
