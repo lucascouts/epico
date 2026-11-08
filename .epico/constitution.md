@@ -64,3 +64,4 @@
 - host — a developer's plugin: bash, jq, git and Claude Code from the machine, as CI uses them
 
 ## Invariants
+- Pillars, in order — Security, Stability, Performance: on a conflict the earlier one wins; a performance shortcut carries the proof that the result stays the same, and nothing skips a security check (PURPOSE.md, Foundation pillars)
