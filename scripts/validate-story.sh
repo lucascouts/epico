@@ -283,6 +283,23 @@ if [[ -n "$ROADMAP_VAL" ]]; then
   fi
 fi
 
+# --- Read the declared refs ---
+# `refs:` names the document sections the story starts from, as `<doc>#<anchor>`
+# (references/context-discovery.md). A WARNING, NEVER AN ERROR, for the reason
+# `roadmap:` gives above, and because a ref is a hint: the story can run without
+# it. The resolution is resolve-refs.sh's, never a second parser here.
+REFS_VAL=$(frontmatter_field "$STORY_DIR/tasks.md" refs)
+if [[ -n "$REFS_VAL" ]]; then
+  if ! [[ "$REFS_VAL" =~ ^\[.*\]$ ]]; then
+    add_warning "tasks.md frontmatter 'refs' is not a list: found '$REFS_VAL' — write it as refs: [ARCHITECTURE#5.2, ADR-0012#decision]"
+  elif [[ "$STORY_DIR" == */.epico/* ]]; then
+    while IFS=$'\t' read -r ref_name ref_status; do
+      [[ -n "$ref_name" ]] && add_warning "tasks.md frontmatter 'refs' names $ref_name, which does not resolve ($ref_status) — epico-refs --story <dir> shows the candidates"
+    done < <(bash "$(dirname "${BASH_SOURCE[0]}")/resolve-refs.sh" --story "$STORY_DIR" 2>/dev/null \
+      | jq -r '.refs[] | select(.status != "found") | [.ref, .status] | @tsv' 2>/dev/null || true)
+  fi
+fi
+
 # --- Artifacts disagreeing about the scale ---
 # One story, one scale, so artifacts declaring different values disagree about
 # the SHAPE OF THE WORK — the same defect the `status:` collector below reports

@@ -54,7 +54,7 @@ One block, N rows, one confirmation:
 | 1 | `<slug>` | feature | full | — | new contract between services — the architectural signal Full asks for |
 | 2 | `<slug>` | bugfix | fast | 1 | — |
 
-**When the source is a ROADMAP or stage file with numbered tasks**, the table gains a `Roadmap` column naming the task IDs each proposed story works on (`2.4.1, 2.4.2`), and each story's `tasks.md` gets them as `roadmap: [2.4.1, 2.4.2]` ([clarify.md](clarify.md#the-roadmap-tasks-only-when-the-project-numbers-them)). Several tasks may form one story, and one large task may be split across stories; every numbered task of the source appears in at least one row or is named below the table as left out, with the reason.
+**When the source is a ROADMAP or stage file with numbered tasks**, the table gains a `Roadmap` column naming the task IDs each proposed story works on (`2.4.1, 2.4.2`), and each story's `tasks.md` gets them as `roadmap: [2.4.1, 2.4.2]`, with the sections its tasks' `REF:` lines point at as `refs:` ([context-discovery.md](context-discovery.md#document-references)) ([clarify.md](clarify.md#the-roadmap-tasks-only-when-the-project-numbers-them)). Several tasks may form one story, and one large task may be split across stories; every numbered task of the source appears in at least one row or is named below the table as left out, with the reason.
 
 **A row is `standard` unless it names an architectural signal.** Scale per row follows the same rule a single create follows ([triage.md](triage.md#mode-recommendation)): Full is opt-in on a signal, never on file count. Row 1 above earns its `full` in the last column — a row that cannot fill that column is a `standard`.
 
