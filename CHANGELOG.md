@@ -14,6 +14,7 @@ on there is one floor for the whole plugin (see README "Prerequisites").
 
 - **A `docs/` layout for new projects.** `init` offers, to a project with no ROADMAP yet, a template the checkpoint and the doc writer already read: `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/ROADMAP.md` as an index, `docs/stages/01-foundation.md` with tasks in the five-line form, and `docs/adr/0001-…` with Enforcement and Amendments. `epico-docs-layout` writes only the missing files and refuses a project that already keeps a ROADMAP.
 - **`refs:` — the document sections a story starts from.** `refs: [ARCHITECTURE#5.2, stages/03#3.1.2, ADR-0012#decision]` in `tasks.md`; `epico-refs` resolves each to a file and a line range (a numbered heading, a stage task, or a GitHub slug), and `validate-story` warns on one that does not resolve. Refs are hints, never limits.
+- **`epico-gitpolicy` reports the `effective` policy.** An undeclared workspace is inferred as `tracked-md` when git tracks `.epico/` markdown and `local-only` otherwise; the checkpoint follows it, and the doctor's missing-`.gitpolicy` warning names it.
 
 ### Fixed
 

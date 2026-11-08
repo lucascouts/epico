@@ -95,7 +95,12 @@ else
   done
 fi
 
-[ -f "$EPICO_DIR/.gitpolicy" ] || add warning gitpolicy .epico/.gitpolicy "missing — init records whether .epico/ is tracked"
+# The inference is epico-gitpolicy's, read from the project root: it is the one
+# reading of git state, and the policy the checkpoint and the supervisors follow.
+if [ ! -f "$EPICO_DIR/.gitpolicy" ]; then
+  inferred=$(cd "$EPICO_DIR/.." && bash "$(dirname "${BASH_SOURCE[0]}")/epico-gitpolicy.sh" 2>/dev/null | jq -r '.effective // empty' 2>/dev/null || true)
+  add warning gitpolicy .epico/.gitpolicy "missing — init records whether .epico/ is tracked; until then it is inferred as ${inferred:-local-only} from what git tracks"
+fi
 
 if [ ! -f "$EPICO_DIR/EPICO.md" ]; then
   add warning index .epico/EPICO.md "missing — run epico-index"

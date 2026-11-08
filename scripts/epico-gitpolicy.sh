@@ -6,14 +6,21 @@
 #
 # Output: one JSON object on stdout —
 #   {git: true, policy: tracked-md|local-only|undeclared,
+#    effective: tracked-md|local-only,
 #    gitignore_ignores_epico: bool, gitignore_source: "<path>"|null,
 #    tracked_md: N, tracked_draft: N,
 #    verdict: consistent|contradiction|partial}
 # and, in a workspace that is not a git repository:
-#   {git: false, policy: …, verdict: "consistent"}
+#   {git: false, policy: …, effective: …, verdict: "consistent"}
+#
+# `effective` is the policy the workspace runs under: the declared one, or for
+# an undeclared workspace `tracked-md` when git tracks any .epico/ markdown
+# artifact (tracked_md > 0) and `local-only` otherwise — .draft/ never counts.
+# The checkpoint and the supervisors read it to decide whether their records
+# are versioned; `policy` stays what was declared, so init still asks.
 #
 # CONSUMER REQUIREMENT — READ A MEASUREMENT KEY ONLY WHEN `git` IS true.
-# `git`, `policy` and `verdict` are TOTAL: every path emits all three, so they
+# `git`, `policy`, `effective` and `verdict` are TOTAL: every path emits all three, so they
 # are safe to read unconditionally. The four MEASUREMENT keys are not —
 # gitignore_ignores_epico, gitignore_source, tracked_md and tracked_draft are
 # ABSENT from the non-git object, and `jq -r` renders an absent key as the
@@ -193,6 +200,7 @@ if [[ "$rc" -ne 0 || "$IN_TREE" != "true" ]]; then
     "{" \
     "  \"git\": false," \
     "  \"policy\": \"$(json_escape "$POLICY")\"," \
+    "  \"effective\": \"$( [[ "$POLICY" == undeclared ]] && echo local-only || echo "$POLICY")\"," \
     "  \"verdict\": \"consistent\"" \
     "}"
   exit 0
@@ -351,6 +359,10 @@ while IFS= read -r -d '' TRACKED_PATH; do
   fi
 done < <(git ls-files -z -- "$EPICO_DIR" 2>/dev/null)
 TRACKED_ANY=$((TRACKED_MD + TRACKED_DRAFT))
+EFFECTIVE="$POLICY"
+if [[ "$POLICY" == undeclared ]]; then
+  if [[ "$TRACKED_MD" -gt 0 ]]; then EFFECTIVE=tracked-md; else EFFECTIVE=local-only; fi
+fi
 
 # epico_has_untracked_artifacts: succeeds when at least one md-class artifact
 # exists under .epico/ that git is NOT tracking and is NOT ignoring. Existence
@@ -460,6 +472,7 @@ printf '%s\n' \
   "{" \
   "  \"git\": true," \
   "  \"policy\": \"$(json_escape "$POLICY")\"," \
+  "  \"effective\": \"$(json_escape "$EFFECTIVE")\"," \
   "  \"gitignore_ignores_epico\": $GITIGNORE_IGNORES_EPIC," \
   "  \"gitignore_source\": $GITIGNORE_SOURCE_JSON," \
   "  \"tracked_md\": $TRACKED_MD," \

@@ -49,4 +49,4 @@ documents: [<each file the doc writer wrote>]
 next_stage: <N+1>
 ```
 
-Mechanical items from step 1 are summarised by count, not listed. It follows the project's `.epico/.gitpolicy`: versioned under `tracked-md`, local under `local-only`.
+Mechanical items from step 1 are summarised by count, not listed. It follows the project's `.epico/.gitpolicy` as the `effective` policy `epico-gitpolicy` reports — the declared one, or, when none is declared, `tracked-md` if git already tracks `.epico/` markdown and `local-only` otherwise: versioned under `tracked-md`, local under `local-only`.
