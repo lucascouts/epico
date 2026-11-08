@@ -100,7 +100,7 @@ Artifacts live in `.epico/stories/NNN-kebab-case/`. Whether git tracks them is a
 | Command | Purpose |
 |---|---|
 | `/epico:epico` | Create story from free-text description (triage + clarify + phases) |
-| `/epico:epico init` | Set up `.epico/constitution.md`, offer deny rules for files Claude must not edit, ask the [versioning policy](#versioning-policy-for-epic) question (for `CLAUDE.md`, use the built-in `/init`) |
+| `/epico:epico init` | Set up `.epico/constitution.md`, offer deny rules for files Claude must not edit, ask the [versioning policy](#versioning-policy-for-epic) question, and offer a `docs/` layout (PRD, ARCHITECTURE, ROADMAP as an index with one file per stage, ADRs) to a project with no ROADMAP yet (for `CLAUDE.md`, use the built-in `/init`) |
 | `/epico:epico stories` | List all stories (summary) |
 | `/epico:epico stories full` | List all stories with tasks |
 | `/epico:epico stories NNN` | Show one story in detail |

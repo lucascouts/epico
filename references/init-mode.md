@@ -30,6 +30,9 @@ Triggered by `/epico:epico init`. Interactive wizard to set up project configura
    - The archive: offer `permissions.deny: ["Edit(.epico/archive/**)", "Write(.epico/archive/**)"]` in `.claude/settings.json` — [1] add it (default) [2] skip. Claude Code enforces a deny rule; the archive hook is best-effort and stays as a second line. `epico-archive` moves stories through Bash, which the rule does not cover, so archiving keeps working
    - Files or patterns Claude should never modify? When the user names any, offer to add one `Edit(<pattern>)` rule per pattern to `permissions.deny` in `.claude/settings.json` — a rule Claude Code enforces, where a line in `CLAUDE.md` is only advice. Write it only on the user's yes.
 
+   **Project docs — the `docs/` layout (asked only when the scan found no ROADMAP):**
+   - Start the project's documents from the template? [1] skip (default) [2] write it. Worth it for a project that will run more than a few stories: `checkpoint` closes its stages, and the doc writer keeps its decisions. On [2], run `epico-docs-layout` from the workspace root — it writes `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/ROADMAP.md` (an index), `docs/stages/01-foundation.md` and `docs/adr/0001-record-architecture-decisions.md`, only the files that are missing, and refuses a project that already keeps a ROADMAP. Its JSON lists what it wrote and what it kept; the report names each file. A project with its own ROADMAP migrates only when the user asks, through a story. Headless: skip, and say so in the report
+
    **Defaults — decisions the requester is never asked** (written into `.epico/constitution.md` as a `## Defaults` block; triage, Clarify and Run read it, and the [plain register](plain-register.md#decisions-the-requester-is-not-asked) relies on it):
    - Data files the program creates? [1] gitignored (default) [2] versioned
    - Tests in Fast stories? [1] written silently (default) [2] asked each time
