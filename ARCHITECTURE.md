@@ -20,6 +20,21 @@ Design-level view of the Epico plugin for contributors and integrators. The [REA
 | Understand the validation layers | [Validation layers](#validation-layers) |
 | Know how E2E tooling is chosen | [Preferred-tooling policy](#preferred-tooling-policy) |
 | Know why a choice was made | [Architectural decisions](#architectural-decisions) |
+| Know what every change is weighed against | [Foundation pillars](#foundation-pillars) |
+
+---
+
+## Foundation pillars
+
+Every change to the plugin is weighed against three pillars, in this order — **Security, Stability, Performance** — and on a conflict the earlier one wins ([PURPOSE.md](PURPOSE.md#foundation-pillars) gives the rule). Each pillar is a guarantee held by mechanisms already in the tree; a change that weakens one of them says so in its pull request.
+
+| Pillar | Guarantee | Held by |
+|---|---|---|
+| **Security** | no secret leaves in a log, report or memory page; no input runs as code; nothing leaves the machine — push, publish, deletion — without the user's explicit yes; a guard that cannot decide refuses; each sub-agent gets the tools its job needs and no more; no runtime dependency beyond bash, jq and git | `hook-archive-guard.sh`, `hook-executor-guard.sh`, `hook-commit-identity-guard.sh`; the secrets scan before an archive (`archive-story.sh`); the outward-action rule in [run-mode.md](references/run-mode.md); the `tools:` list in each `agents/*.md` |
+| **Stability** | the same input gives the same result: one JSON contract per script with exit 0/1/2; writes through a temporary file and a rename, under a lock where two writers can meet; re-runs are safe; a stored artifact from an older version is migrated, never misread; every behaviour has a bats case written first, run as a normal user; when a proof is missing, the slower correct path | the script headers; `close-subtask.sh`, `deviation.sh`; `migrate-story.sh`, `migrate-dir.sh`; `tests/` and the four CI jobs in `.github/workflows/shell.yml` |
+| **Performance** | tokens and minutes go only where they buy something: deterministic work runs in scripts, not sub-agents; production code runs inline unless a parallel group proves independence; each check runs once per state of the code; nothing is re-done that a proof shows unchanged | `validate-run.sh` (the deterministic half of validation, and `--only` for a revalidation); the execution threshold in [run-mode.md](references/run-mode.md); [run-parallel.md](references/run-parallel.md); `story-telemetry.sh` to measure what a change costs |
+
+A performance change therefore carries its stability proof with it — re-running less needs the evidence that the rest cannot have changed — and no cache or shortcut skips a security check.
 
 ---
 
