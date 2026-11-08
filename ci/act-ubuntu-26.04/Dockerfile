@@ -5,7 +5,7 @@
 # .github/workflows/shell.yml installs itself.
 #
 #   docker build -t epico-act:26.04 ci/act-ubuntu-26.04
-#   act -P ubuntu-26.04=epico-act:26.04 --pull=false -j bats
+#   ci/act-mirror.sh bats      (act on this image, from the local caches)
 FROM ubuntu:26.04@sha256:c098726dd9b9733f3e885f8de0ef375206a311b0a317eadc40d347b1115fb944
 
 # nodejs runs the JavaScript actions (actions/checkout); npm installs Claude
@@ -20,6 +20,14 @@ RUN apt-get update \
 RUN useradd -m -s /bin/bash runner \
  && printf 'runner ALL=(ALL) NOPASSWD:ALL\n' > /etc/sudoers.d/runner \
  && chmod 0440 /etc/sudoers.d/runner
+
+# Keep what apt downloads, as the runner's VM does — the Docker base deletes
+# every .deb after an install — and give npm its cache directory as the runner's
+# user: ci/act-mirror.sh mounts both as volumes, and a new volume takes the
+# owner of the directory it lands on.
+RUN rm -f /etc/apt/apt.conf.d/docker-clean \
+ && mkdir -p /home/runner/.npm \
+ && chown runner:runner /home/runner/.npm
 USER runner
 ENV NPM_CONFIG_PREFIX=/home/runner/.npm-global \
     PATH=/home/runner/.npm-global/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin \

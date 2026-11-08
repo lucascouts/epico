@@ -58,7 +58,7 @@ jobs:
         # as many at once as the runner has cores (tests/run-suite.sh).
         #
         # RUNNING THIS JOB UNDER `act`: use the image in ci/act-ubuntu-26.04
-        # (`act -P ubuntu-26.04=epico-act:26.04 --pull=false`). The published
+        # through `ci/act-mirror.sh bats`, which also keeps the downloads cached. The published
         # act images are Ubuntu 24.04 with GNU coreutils, which hides what
         # 26.04's uutils changes, and they run as root, where the cases that
         # assert a script refuses an unreadable file fail as false reds. The

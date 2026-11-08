@@ -41,7 +41,7 @@
 - Security policy — `SECURITY.md` exists and names a private channel
 - Branch protection — `gh api repos/lucascouts/epico/rules/branches/main` lists `deletion`, `non_fast_forward` and `required_status_checks` (today: none — the ruleset targets no branch)
 - Minimum dependency age — Dependabot `cooldown` of 7 days on GitHub Actions
-- CI mirror — build once `docker build -t epico-act:26.04 ci/act-ubuntu-26.04`, then `act -P ubuntu-26.04=epico-act:26.04 --pull=false -j <job>` for `shellcheck`, `validate-examples`, `plugin-validate` and `bats`, from a clean clone (never a git worktree: its `.git` points outside the mount). The image is the runner's Ubuntu 26.04 (uutils coreutils) as a non-root user, so all four pass; the published act images are 24.04/GNU and root
+- CI mirror — build once `docker build -t epico-act:26.04 ci/act-ubuntu-26.04`, then `ci/act-mirror.sh <job>` for `shellcheck`, `validate-examples`, `plugin-validate` and `bats`, one job at a time, from a clean clone (never a git worktree: its `.git` points outside the mount). The wrapper runs `act` on that image with `--pull=false --action-offline-mode` and each job's apt and npm downloads in its own named volumes, so a second run downloads nothing it already has. The image is the runner's Ubuntu 26.04 (uutils coreutils) as a non-root user, so all four pass; the published act images are 24.04/GNU and root
 - Plugin schema — `claude plugin validate --strict` on `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `skills`, `agents`
 
 ## Defaults
